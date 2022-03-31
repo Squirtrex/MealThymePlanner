@@ -13,16 +13,19 @@ public class User {
     private ArrayList<IngredientTag> hard_no;
     private ArrayList<IngredientTag> preferences;
     private HashMap<Recipe, Double> algorithmScore;
-    private HashMap<Recipe, Double> userRatings;
+    private HashMap<Recipe, Integer> userRatings;
     private HashMap<Recipe, Integer> timeSinceLastMade;
     private ArrayList<Recipe> prioritizedRecipes;
     
-    public User()
+    private HashMap<String, Preference> ingredientPrefs;
+    private HashMap<RecipeTag, Preference> attributePrefs;
+    
+public User()
     {
-        this("No Name", new ArrayList<IngredientTag>(), new ArrayList<IngredientTag>(), new HashMap<Recipe, Double>(), new HashMap<Recipe, Double>(), new HashMap<Recipe, Integer>(), new ArrayList<Recipe>());
+        this("No Name", new ArrayList<IngredientTag>(), new ArrayList<IngredientTag>(), new HashMap<Recipe, Double>(), new HashMap<Recipe, Integer>(), new HashMap<Recipe, Integer>(), new ArrayList<Recipe>(), new HashMap<String, Preference>(), new HashMap<RecipeTag, Preference>());
     }
 
-    public User(String name, ArrayList<IngredientTag> hard_no, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Double> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes) {
+    public User(String name, ArrayList<IngredientTag> hard_no, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs) {
         this.name = name;
         this.hard_no = hard_no;
         this.preferences = preferences;
@@ -64,11 +67,11 @@ public class User {
         this.algorithmScore = algorithmScore;
     }
 
-    public HashMap<Recipe, Double> getUserRatings() {
+    public HashMap<Recipe, Integer> getUserRatings() {
         return userRatings;
     }
 
-    public void setUserRatings(HashMap<Recipe, Double> userRatings) {
+    public void setUserRatings(HashMap<Recipe, Integer> userRatings) {
         this.userRatings = userRatings;
     }
 
@@ -86,6 +89,22 @@ public class User {
 
     public void setPrioritizedRecipes(ArrayList<Recipe> prioritizedRecipes) {
         this.prioritizedRecipes = prioritizedRecipes;
+    }
+
+    public HashMap<String, Preference> getIngredientPrefs() {
+        return ingredientPrefs;
+    }
+
+    public HashMap<RecipeTag, Preference> getAttributePrefs() {
+        return attributePrefs;
+    }
+
+    public void setIngredientPrefs(HashMap<String, Preference> ingredientPrefs) {
+        this.ingredientPrefs = ingredientPrefs;
+    }
+
+    public void setAttributePrefs(HashMap<RecipeTag, Preference> attributePrefs) {
+        this.attributePrefs = attributePrefs;
     }
     
     

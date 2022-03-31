@@ -1,4 +1,6 @@
-class Preference {
+package MealThymePlanner;
+
+public class Preference {
   double preference;
   int rated_count;
   int rating_total;
