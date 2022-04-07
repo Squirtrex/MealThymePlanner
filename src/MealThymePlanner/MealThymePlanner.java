@@ -28,17 +28,20 @@ public class MealThymePlanner {
     private Form futurePlanningForm;
     private Form savedRecipesForm;
     private Form newUserForm;
+    private Form myRecipesForm;
+    private Form addCustomRecipeForm;
+    private Form favoriteRecipesForm;
     private User currentUser = new User();
 
     public void setMainMenuForm() {
         Form tempForm = new Form("Main Menu", new GridLayout(4, 2));
-        Button recommended = new Button(("Recommended For You"));
-        Button savedRecipesButton = new Button(("Saved Recipes"));
-        Button browseButton = new Button(("Browse"));
-        Button searchButton = new Button(("Search"));
-        Button groceryListButton = new Button(("Grocery List"));
-        Button futureButton = new Button(("Plan Future Meals"));
-        Button profileButton = new Button(("Profile"));
+        Button recommended = new Button("Recommended For You");
+        Button savedRecipesButton = new Button("Saved Recipes");
+        Button browseButton = new Button("Browse");
+        Button searchButton = new Button("Search");
+        Button groceryListButton = new Button("Grocery List");
+        Button futureButton = new Button("Plan Future Meals");
+        Button profileButton = new Button("Profile");
         tempForm.add(recommended);
         tempForm.add(savedRecipesButton);
         tempForm.add(browseButton);
@@ -55,7 +58,7 @@ public class MealThymePlanner {
 
     public void setFuturePlanningForm() {
         Form tempForm = new Form("Plan Future Meals", BoxLayout.y());
-        Button homeButton = new Button(("Home"));
+        Button homeButton = new Button("Home");
         tempForm.add(homeButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
@@ -64,22 +67,63 @@ public class MealThymePlanner {
 
     public void setSavedRecipesForm() {
         Form tempForm = new Form("Saved Recipes", BoxLayout.y());
-        Button homeButton2 = new Button(("Home"));
-        Button myRecipesButton = new Button(("My Recipes"));
-        Button customButton = new Button(("Add Custom Recipe"));
-        Button favoriteButton = new Button(("Favorite Recipes"));
-        tempForm.add(homeButton2);
+        Button homeButton = new Button("Home");
+        Button myRecipesButton = new Button("My Recipes");
+        Button customButton = new Button("Add Custom Recipe");
+        Button favoriteButton = new Button("Favorite Recipes");
+        tempForm.add(homeButton);
         tempForm.add(myRecipesButton);
         tempForm.add(customButton);
         tempForm.add(favoriteButton);
-        homeButton2.addActionListener((e) -> mainMenuForm.show());
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+        myRecipesButton.addActionListener((e) -> myRecipesForm.show());
+        customButton.addActionListener((e) -> addCustomRecipeForm.show());
+        favoriteButton.addActionListener((e) -> favoriteRecipesForm.show());
 
         savedRecipesForm = tempForm;
+    }
+    
+    public void setMyRecipesForm() {
+        Form tempForm = new Form("My Recipes", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        Button backButton = new Button("Back");
+        tempForm.add(homeButton);
+        tempForm.add(backButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+        backButton.addActionListener((e) -> savedRecipesForm.show());
+
+        myRecipesForm = tempForm;
+    }
+    
+    public void setAddCustomRecipeForm() {
+        Form tempForm = new Form("Add Custom Recipe", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        Button backButton = new Button("Back");
+        tempForm.add(homeButton);
+        tempForm.add(backButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+        backButton.addActionListener((e) -> savedRecipesForm.show());
+
+        addCustomRecipeForm = tempForm;
+    }
+    
+    public void setFavoriteRecipesForm() {
+        Form tempForm = new Form("Favorite Recipes", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        Button backButton = new Button("Back");
+        tempForm.add(homeButton);
+        tempForm.add(backButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+        backButton.addActionListener((e) -> savedRecipesForm.show());
+
+        favoriteRecipesForm = tempForm;
     }
 
     public void setNewUserForm() {
         Form tempForm = new Form("New User", BoxLayout.y());
-        Button homeButton = new Button(("Home"));
+        Label welcome = new Label("Welcome");
+        Button homeButton = new Button("Home");
+        tempForm.add(welcome);
         tempForm.add(homeButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
@@ -90,6 +134,9 @@ public class MealThymePlanner {
         setMainMenuForm();
         setFuturePlanningForm();
         setSavedRecipesForm();
+        setMyRecipesForm();
+        setAddCustomRecipeForm();
+        setFavoriteRecipesForm();        
         setNewUserForm();
 
     }
