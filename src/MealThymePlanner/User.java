@@ -15,17 +15,30 @@ public class User {
     private HashMap<Recipe, Double> algorithmScore;
     private HashMap<Recipe, Integer> userRatings;
     private HashMap<Recipe, Integer> timeSinceLastMade;
-    private ArrayList<Recipe> prioritizedRecipes;
-    
+    private ArrayList<Recipe> prioritizedRecipes;    
     private HashMap<String, Preference> ingredientPrefs;
     private HashMap<RecipeTag, Preference> attributePrefs;
+    private boolean newUser;
     
 public User()
     {
-        this("No Name", new ArrayList<IngredientTag>(), new ArrayList<IngredientTag>(), new HashMap<Recipe, Double>(), new HashMap<Recipe, Integer>(), new HashMap<Recipe, Integer>(), new ArrayList<Recipe>(), new HashMap<String, Preference>(), new HashMap<RecipeTag, Preference>());
+        this.name = "No Name";
+        this.hard_no = new ArrayList<>();
+        this.preferences = new ArrayList<>();
+        this.algorithmScore = new HashMap<>();
+        this.userRatings = new HashMap<>();
+        this.timeSinceLastMade = new HashMap<>();
+        this.prioritizedRecipes = new ArrayList<>();
+        this.ingredientPrefs =  new HashMap<>();
+        this.attributePrefs =  new HashMap<>();
+        this.newUser = true;
     }
 
-    public User(String name, ArrayList<IngredientTag> hard_no, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs) {
+    public User(String name, ArrayList<IngredientTag> hard_no, ArrayList<IngredientTag> preferences, 
+            HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, 
+            HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, 
+            HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs,
+            boolean newUser) {
         this.name = name;
         this.hard_no = hard_no;
         this.preferences = preferences;
@@ -33,6 +46,7 @@ public User()
         this.userRatings = userRatings;
         this.timeSinceLastMade = timeSinceLastMade;
         this.prioritizedRecipes = prioritizedRecipes;
+        this.newUser = newUser;
     }
 
     public String getName() {
@@ -106,6 +120,16 @@ public User()
     public void setAttributePrefs(HashMap<RecipeTag, Preference> attributePrefs) {
         this.attributePrefs = attributePrefs;
     }
+
+    public boolean isNewUser() {
+        return newUser;
+    }
+
+    public void setNewUser(boolean newUser) {
+        this.newUser = newUser;
+    }
+    
+    
     
     
     
