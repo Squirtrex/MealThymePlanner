@@ -1,5 +1,6 @@
 package com.mycompany.mealthymeplanner;
 
+import com.codename1.components.SpanLabel;
 import static com.codename1.ui.CN.*;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
@@ -13,7 +14,11 @@ import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
 import com.codename1.ui.Button;
+import com.codename1.ui.CheckBox;
+import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.table.TableLayout;
 
 /**
@@ -22,15 +27,21 @@ import com.codename1.ui.table.TableLayout;
  */
 public class MealThymePlanner {
 
-    private Form current;
+    private Form currentForm;
+    private Form previousForm;
     private Resources theme;
     private Form mainMenuForm;
     private Form futurePlanningForm;
     private Form savedRecipesForm;
     private Form newUserForm;
+    private Form favoriteCuisinesForm;
+    private Form allergiesForm;
     private Form myRecipesForm;
     private Form addCustomRecipeForm;
     private Form favoriteRecipesForm;
+    private Form profileForm;
+    
+    
     private User currentUser = new User();
 
     public void setMainMenuForm() {
@@ -52,6 +63,7 @@ public class MealThymePlanner {
 
         futureButton.addActionListener((e) -> futurePlanningForm.show());
         savedRecipesButton.addActionListener((e) -> savedRecipesForm.show());
+        profileButton.addActionListener((e) -> profileForm.show());
 
         mainMenuForm = tempForm;
     }
@@ -118,16 +130,79 @@ public class MealThymePlanner {
 
         favoriteRecipesForm = tempForm;
     }
+    
+    public void setProfileForm() {
+        Form tempForm = new Form("Profile", BoxLayout.y());
+        Button homeButton = new Button("Home");
+
+        tempForm.add(homeButton);
+  
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+
+        profileForm = tempForm;
+    }
 
     public void setNewUserForm() {
         Form tempForm = new Form("New User", BoxLayout.y());
-        Label welcome = new Label("Welcome");
-        Button homeButton = new Button("Home");
+        SpanLabel welcome = new SpanLabel("Welcome. Please answer a few questions so our app can better recommend you meals that fit your preferences. These options can be set later in your Profile.");
+        
+        String[] cuisineTypes = new String[]{"None", "Mexican", "Italian", "American"};
+        
+        Label cuisineLabel = new Label("Click Here to pick your favorite cuisines");
+        Button cuisineButton = new Button("Favorite Cuisines");
+        
+        Label allergiesLabel = new Label("Click Here if you have any allergies");
+        Button allergiesButton = new Button("Allergies");
+        
+        Label doneLabel = new Label("When finished, hit Done");
+        Button doneButton = new Button("Done");
+        
         tempForm.add(welcome);
-        tempForm.add(homeButton);
-        homeButton.addActionListener((e) -> mainMenuForm.show());
+        tempForm.add(cuisineLabel); 
+        tempForm.add(cuisineButton);
+        tempForm.add(allergiesLabel); 
+        tempForm.add(allergiesButton);
+        tempForm.add(doneLabel); 
+        tempForm.add(doneButton);  
+
+        cuisineButton.addActionListener((e) -> favoriteCuisinesForm.show());
+        allergiesButton.addActionListener((e) -> allergiesForm.show());
+        doneButton.addActionListener((e) -> mainMenuForm.show());
 
         newUserForm = tempForm;
+    }
+    
+    public void setFavoriteCuisineForm() {
+        Form tempForm = new Form("Favorite Cuisines", BoxLayout.y());
+        
+        Label favoriteLabel = new Label("Please check your favorite cuisines.");
+        CheckBox cb1 = new CheckBox("Mexican");
+        CheckBox cb2 = new CheckBox("Italian");
+        CheckBox cb3 = new CheckBox("American");
+
+        Button backButton = new Button("Back");
+
+        tempForm.add(favoriteLabel);
+        tempForm.add(cb1);
+        tempForm.add(cb2);
+        tempForm.add(cb3);
+        tempForm.add(backButton);
+
+        backButton.addActionListener((e) -> newUserForm.show());
+
+        favoriteCuisinesForm = tempForm;
+    }
+    
+    public void setAllergiesForm() {
+        Form tempForm = new Form("Allergies", BoxLayout.y());
+
+        Button backButton = new Button("Back");
+
+        tempForm.add(backButton);
+
+        backButton.addActionListener((e) -> newUserForm.show());
+
+        allergiesForm = tempForm;
     }
 
     public void setUpForms() {
@@ -138,6 +213,9 @@ public class MealThymePlanner {
         setAddCustomRecipeForm();
         setFavoriteRecipesForm();        
         setNewUserForm();
+        setFavoriteCuisineForm();
+        setAllergiesForm();
+        setProfileForm();
 
     }
 
@@ -177,10 +255,10 @@ public class MealThymePlanner {
     }
 
     public void stop() {
-        current = getCurrentForm();
-        if (current instanceof Dialog) {
-            ((Dialog) current).dispose();
-            current = getCurrentForm();
+        currentForm = getCurrentForm();
+        if (currentForm instanceof Dialog) {
+            ((Dialog) currentForm).dispose();
+            currentForm = getCurrentForm();
         }
     }
 
