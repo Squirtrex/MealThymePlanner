@@ -1,4 +1,4 @@
-
+package com.mycompany.mealthymeplanner;
 public class RecipeIngredient {
     
     private double amount;
