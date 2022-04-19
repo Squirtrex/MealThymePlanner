@@ -80,6 +80,8 @@ public class CSV_to_HashMap {
 		
 		return ingredients;
 	}
+        
+        /*
 	
 	public static void main(String[] args) throws IOException, URISyntaxException{
 		//This allows the class to use other methods inside of the file
@@ -157,6 +159,7 @@ public class CSV_to_HashMap {
 				    		 *
 				    		 *
 				    		 */
+        /*
 				    		//Creates recipe object out of the data.
                                                 //hm.ingredientTags was changed to recipeTags, need to fix by adding correct ingredientTags to recipeTags
 				    		Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.recipeTags);
@@ -168,6 +171,9 @@ public class CSV_to_HashMap {
 					System.out.println(e);
 				}
 			}
+        
+     */   
+        
 		//}
 	//}
 }
