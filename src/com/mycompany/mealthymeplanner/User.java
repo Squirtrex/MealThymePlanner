@@ -19,7 +19,8 @@ public class User {
     private HashMap<String, Preference> ingredientPrefs;
     private HashMap<RecipeTag, Preference> attributePrefs;
     private boolean newUser;
-    
+    private ArrayList<String> likedCuisines;
+            
 public User()
     {
         this.name = "No Name";
@@ -32,13 +33,14 @@ public User()
         this.ingredientPrefs =  new HashMap<>();
         this.attributePrefs =  new HashMap<>();
         this.newUser = true;
+        this.likedCuisines = new ArrayList<>();
     }
 
     public User(String name, ArrayList<IngredientTag> hard_no, ArrayList<IngredientTag> preferences, 
             HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, 
             HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, 
             HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs,
-            boolean newUser) {
+            boolean newUser, ArrayList<String> likedCuisines) {
         this.name = name;
         this.hard_no = hard_no;
         this.preferences = preferences;
@@ -47,6 +49,7 @@ public User()
         this.timeSinceLastMade = timeSinceLastMade;
         this.prioritizedRecipes = prioritizedRecipes;
         this.newUser = newUser;
+        this.likedCuisines = likedCuisines;
     }
 
     public String getName() {
@@ -128,6 +131,16 @@ public User()
     public void setNewUser(boolean newUser) {
         this.newUser = newUser;
     }
+
+    public ArrayList<String> getLikedCuisines() {
+        return likedCuisines;
+    }
+
+    public void setLikedCuisines(ArrayList<String> likedCuisines) {
+        this.likedCuisines = likedCuisines;
+    }
+    
+    
     
     
     
