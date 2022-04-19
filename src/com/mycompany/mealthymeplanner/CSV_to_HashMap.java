@@ -2,6 +2,8 @@
  * @author Nicholas Pepin
  */
 
+package com.mycompany.mealthymeplanner;
+
 import java.util.*;
 import java.io.*;
 import java.net.*;
