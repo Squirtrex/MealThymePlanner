@@ -1,10 +1,3 @@
-/**
- *
- * @author Thomas Basore
- * @version 1.0
- */
-package com.mycompany.mealthymeplanner;
-
 import java.util.*;
 
 public class Recipe {
@@ -12,30 +5,24 @@ public class Recipe {
     private String name;
     private ArrayList<RecipeIngredient> ingredients;
     private ArrayList<String> steps;
-    private String description;
-    private int servings;
-    private int calories;
-    private int prepTimeMinutes;
-    private int cookTimeMinutes;
-    private int totalTimeMinutes;
-    private ArrayList<RecipeTag> recipeTags;
+    private String servings;
+    //private int calories;
+    private float cookTimeMinutes;
+    private ArrayList<IngredientTag> recipeTags;
         
     
     public Recipe()
     {
-        this("No Name", new ArrayList<RecipeIngredient>(), new ArrayList<String>(), "No description", 0, 0, 0, 0, 0, new ArrayList<RecipeTag>());
+        this("No Name", new ArrayList<RecipeIngredient>(), new ArrayList<String>(), "", 0, new ArrayList<IngredientTag>());
     }
 
-    public Recipe(String name, ArrayList<RecipeIngredient> ingredients, ArrayList<String> steps, String description, int servings, int calories, int prepTimeMinutes, int cookTimeMinutes, int totalTimeMinutes, ArrayList<RecipeTag> recipeTags) {
+    public Recipe(String name, ArrayList<RecipeIngredient> ingredients, ArrayList<String> steps, String servings, float cookTimeMinutes, ArrayList<IngredientTag> recipeTags) {
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
-        this.description = description;
         this.servings = servings;
-        this.calories = calories;
-        this.prepTimeMinutes = prepTimeMinutes;
+        //this.calories = calories;
         this.cookTimeMinutes = cookTimeMinutes;
-        this.totalTimeMinutes = totalTimeMinutes;
         this.recipeTags = recipeTags;
     }
 
@@ -63,59 +50,35 @@ public class Recipe {
         this.steps = steps;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getServings() {
+    public String getServings() {
         return servings;
     }
 
-    public void setServings(int servings) {
+    public void setServings(String servings) {
         this.servings = servings;
     }
 
-    public int getCalories() {
-        return calories;
-    }
+    //public int getCalories() {
+    //    return calories;
+    //}
 
-    public void setCalories(int calories) {
-        this.calories = calories;
-    }
+    //public void setCalories(int calories) {
+    //    this.calories = calories;
+    //}
 
-    public int getPrepTimeMinutes() {
-        return prepTimeMinutes;
-    }
-
-    public void setPrepTimeMinutes(int prepTimeMinutes) {
-        this.prepTimeMinutes = prepTimeMinutes;
-    }
-
-    public int getCookTimeMinutes() {
+    public float getCookTimeMinutes() {
         return cookTimeMinutes;
     }
 
-    public void setCookTimeMinutes(int cookTimeMinutes) {
+    public void setCookTimeMinutes(float cookTimeMinutes) {
         this.cookTimeMinutes = cookTimeMinutes;
     }
 
-    public int getTotalTimeMinutes() {
-        return totalTimeMinutes;
-    }
-
-    public void setTotalTimeMinutes(int totalTimeMinutes) {
-        this.totalTimeMinutes = totalTimeMinutes;
-    }
-
-    public ArrayList<RecipeTag> getRecipeTags() {
+    public ArrayList<IngredientTag> getRecipeTags() {
         return recipeTags;
     }
 
-    public void setRecipeTags(ArrayList<RecipeTag> recipeTags) {
+    public void setRecipeTags(ArrayList<IngredientTag> recipeTags) {
         this.recipeTags = recipeTags;
     }
     
