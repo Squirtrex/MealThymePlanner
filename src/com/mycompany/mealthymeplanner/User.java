@@ -140,6 +140,13 @@ public User()
         this.likedCuisines = likedCuisines;
     }
     
+    public void addLikedCuisine(String cuisine)
+    {
+        if(likedCuisines.contains(cuisine) == false)
+        {
+            likedCuisines.add(cuisine);
+        }
+    }
     
     
     

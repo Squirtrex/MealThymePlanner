@@ -1,6 +1,7 @@
 /**
  * @author Nicholas Pepin
  */
+package com.mycompany.mealthymeplanner;
 
 import java.util.*;
 import java.io.*;
@@ -9,10 +10,11 @@ import java.net.*;
 public class CSV_to_HashMap {
 	
 	//These are the ArrayLists I used for storage
-	ArrayList<RecipeIngredient> ingredients = new ArrayList<RecipeIngredient>();
-	ArrayList<IngredientTag> ingredientTags = new ArrayList<IngredientTag>();
-	ArrayList<String> steps = new ArrayList<String>();
-	HashMap<String, Recipe> recipes = new HashMap<String, Recipe>();
+	ArrayList<RecipeIngredient> ingredients = new ArrayList<>();
+	ArrayList<IngredientTag> ingredientTags = new ArrayList<>();
+        ArrayList<RecipeTag> recipeTags = new ArrayList<>();
+	ArrayList<String> steps = new ArrayList<>();
+	HashMap<String, Recipe> recipes = new HashMap<>();
 	
 	//This is a method I made to make the ingredients ArrayList
 	public ArrayList<RecipeIngredient> Ing (String str){
@@ -160,7 +162,7 @@ public class CSV_to_HashMap {
 				    		 *
 				    		 */
 				    		//Creates recipe object out of the data.
-				    		Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.ingredientTags);
+				    		Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.recipeTags);
 				    		//Puts recipe object into HashMap using title as key.
 				    		hm.recipes.put(name,recipe);
 				    	}

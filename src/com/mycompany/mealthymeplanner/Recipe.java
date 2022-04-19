@@ -1,8 +1,9 @@
 package com.mycompany.mealthymeplanner;
+
 import java.util.*;
 
 public class Recipe {
-    
+
     private String name;
     private ArrayList<RecipeIngredient> ingredients;
     private ArrayList<String> steps;
@@ -10,10 +11,8 @@ public class Recipe {
     //private int calories;
     private float cookTimeMinutes;
     private ArrayList<RecipeTag> recipeTags;
-        
-    
-    public Recipe()
-    {
+
+    public Recipe() {
         this("No Name", new ArrayList<RecipeIngredient>(), new ArrayList<String>(), "", 0, new ArrayList<RecipeTag>());
     }
 
@@ -62,11 +61,9 @@ public class Recipe {
     //public int getCalories() {
     //    return calories;
     //}
-
     //public void setCalories(int calories) {
     //    this.calories = calories;
     //}
-
     public float getCookTimeMinutes() {
         return cookTimeMinutes;
     }
@@ -82,9 +79,5 @@ public class Recipe {
     public void setRecipeTags(ArrayList<RecipeTag> recipeTags) {
         this.recipeTags = recipeTags;
     }
-    
-    
-    
-    
 
 }

@@ -1,12 +1,12 @@
 package com.mycompany.mealthymeplanner;
+
 public class RecipeIngredient {
-    
+
     private double amount;
     private String amountType;
     Ingredient ingredient;
-    
-    public RecipeIngredient()
-    {
+
+    public RecipeIngredient() {
         this(0.0, "No Name", new Ingredient());
     }
 
@@ -39,7 +39,5 @@ public class RecipeIngredient {
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
-    
-    
 
 }

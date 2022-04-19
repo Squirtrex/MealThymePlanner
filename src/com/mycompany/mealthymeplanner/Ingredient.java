@@ -1,4 +1,5 @@
 package com.mycompany.mealthymeplanner;
+
 import java.util.*;
 
 public class Ingredient {
