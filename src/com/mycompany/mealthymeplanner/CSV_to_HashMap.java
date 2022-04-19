@@ -1,4 +1,7 @@
-package com.mycompany.mealthymeplanner;
+/**
+ * @author Nicholas Pepin
+ */
+
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -6,11 +9,10 @@ import java.net.*;
 public class CSV_to_HashMap {
 	
 	//These are the ArrayLists I used for storage
-	ArrayList<RecipeIngredient> ingredients = new ArrayList<>();
-	ArrayList<IngredientTag> ingredientTags = new ArrayList<>();
-        ArrayList<RecipeTag> recipeTags = new ArrayList<>();        
-	ArrayList<String> steps = new ArrayList<>();
-	HashMap<String, Recipe> recipes = new HashMap<>();
+	ArrayList<RecipeIngredient> ingredients = new ArrayList<RecipeIngredient>();
+	ArrayList<IngredientTag> ingredientTags = new ArrayList<IngredientTag>();
+	ArrayList<String> steps = new ArrayList<String>();
+	HashMap<String, Recipe> recipes = new HashMap<String, Recipe>();
 	
 	//This is a method I made to make the ingredients ArrayList
 	public ArrayList<RecipeIngredient> Ing (String str){
@@ -80,8 +82,6 @@ public class CSV_to_HashMap {
 		
 		return ingredients;
 	}
-        
-        /*
 	
 	public static void main(String[] args) throws IOException, URISyntaxException{
 		//This allows the class to use other methods inside of the file
@@ -93,8 +93,8 @@ public class CSV_to_HashMap {
 		String imgpath = null;
 		ArrayList<RecipeIngredient> In;
 		
-		URL path = CSV_to_HashMap.class.getResource("Welsh.csv");
-		File file = new File(path.getFile());
+		URL path = ClassLoader.getSystemResource("Welsh.csv");
+		File file = new File(path.toURI());
 		
 		//Find a way to read from Data folder universally.
 		//File dir = new File("/eclipse-workspace/Meal Prep App/src/Data");
@@ -159,10 +159,8 @@ public class CSV_to_HashMap {
 				    		 *
 				    		 *
 				    		 */
-        /*
 				    		//Creates recipe object out of the data.
-                                                //hm.ingredientTags was changed to recipeTags, need to fix by adding correct ingredientTags to recipeTags
-				    		Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.recipeTags);
+				    		Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.ingredientTags);
 				    		//Puts recipe object into HashMap using title as key.
 				    		hm.recipes.put(name,recipe);
 				    	}
@@ -171,9 +169,6 @@ public class CSV_to_HashMap {
 					System.out.println(e);
 				}
 			}
-        
-     */   
-        
 		//}
 	//}
 }
