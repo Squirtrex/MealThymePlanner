@@ -1,9 +1,3 @@
-/**
- *
- * @author Thomas Basore
- * @version 1.0
- */
-package com.mycompany.mealthymeplanner;
 
 public class RecipeIngredient {
     
