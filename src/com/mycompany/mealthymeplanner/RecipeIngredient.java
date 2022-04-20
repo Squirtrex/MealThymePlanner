@@ -39,5 +39,11 @@ public class RecipeIngredient {
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
+    
+    @Override
+    public String toString()
+    {
+        return amount + " " + amountType + " " + ingredient.getName();
+    }
 
 }

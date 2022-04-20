@@ -42,20 +42,27 @@ public class MealThymePlanner {
     private Form addCustomRecipeForm;
     private Form favoriteRecipesForm;
     private Form profileForm;
+    private Form browseForm;
+    private Form recommendedForm;
+    private Form groceryListForm;
+    private Form searchForm;
+    private Form recipeForm;
 
     private User currentUser = new User();
     private ArrayList<String> cuisineTypes = new ArrayList<>(Arrays.asList("Italian", "Mexican", "American", "Asian", "African", "Middle Eastern"));
+    private ArrayList<String> allergies = new ArrayList<>(Arrays.asList("Dairy", "Gluten", "Nuts", "Shellfish"));
+    private Recipe testRecipe = new Recipe("Test Name", new ArrayList<RecipeIngredient>(), new ArrayList<String>(), "5 servings", 800, 30, new ArrayList<RecipeTag>());
 
     public void setMainMenuForm() {
         Form tempForm = new Form("Main Menu", new GridLayout(4, 2));
-        Button recommended = new Button("Recommended For You");
+        Button recommendedButton = new Button("Recommended For You");
         Button savedRecipesButton = new Button("Saved Recipes");
         Button browseButton = new Button("Browse");
         Button searchButton = new Button("Search");
         Button groceryListButton = new Button("Grocery List");
         Button futureButton = new Button("Plan Future Meals");
         Button profileButton = new Button("Profile");
-        tempForm.add(recommended);
+        tempForm.add(recommendedButton);
         tempForm.add(savedRecipesButton);
         tempForm.add(browseButton);
         tempForm.add(searchButton);
@@ -63,11 +70,58 @@ public class MealThymePlanner {
         tempForm.add(futureButton);
         tempForm.add(profileButton);
 
-        futureButton.addActionListener((e) -> futurePlanningForm.show());
+        recommendedButton.addActionListener((e) -> recommendedForm.show());
         savedRecipesButton.addActionListener((e) -> savedRecipesForm.show());
+        browseButton.addActionListener((e) -> browseForm.show());
+        searchButton.addActionListener((e) -> searchForm.show());
+        groceryListButton.addActionListener((e) -> groceryListForm.show());
+        futureButton.addActionListener((e) -> futurePlanningForm.show());
         profileButton.addActionListener((e) -> profileForm.show());
 
         mainMenuForm = tempForm;
+    }
+    
+    public void setRecipeForm(Recipe recipe) {
+        Form tempForm = new Form("Recipe", BoxLayout.y());
+        
+        Label recipeNameLabel = new Label(recipe.getName());
+        Label servingsLabel = new Label("Servings: " + recipe.getServings());
+        Label caloriesLabel = new Label("Calories: " + recipe.getCalories());
+        Label cookTimeLabel = new Label("Cook Time: " + recipe.getCookTimeMinutes() + " minutes"); 
+        Label ingrLabel = new Label("Ingredients: "); 
+        ArrayList<Label> ingredientLabels = new ArrayList<>();
+        
+        for(RecipeIngredient ingred: recipe.getIngredients())
+        {
+            ingredientLabels.add(new Label(ingred.toString()));
+        }        
+        
+        Label dirLabel = new Label("Directions: "); 
+        ArrayList<Label> directionsLabels = new ArrayList<>();
+        
+        for(String direc: recipe.getDirections())
+        {
+            directionsLabels.add(new Label(direc));
+        }    
+
+        Button homeButton = new Button("Home");
+        
+        tempForm.add(recipeNameLabel);
+        tempForm.add(servingsLabel);
+        tempForm.add(caloriesLabel);
+        tempForm.add(cookTimeLabel);
+        tempForm.add(ingrLabel);        
+        for (Label lab : ingredientLabels) {
+            tempForm.add(lab);
+        }
+        tempForm.add(dirLabel);
+        for (Label lab : directionsLabels) {
+            tempForm.add(lab);
+        }        
+        tempForm.add(homeButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+
+        recipeForm = tempForm;
     }
 
     public void setFuturePlanningForm() {
@@ -77,6 +131,49 @@ public class MealThymePlanner {
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
         futurePlanningForm = tempForm;
+    }
+    
+    public void setBrowseForm() {
+        Form tempForm = new Form("Browse", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        tempForm.add(homeButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+
+        browseForm = tempForm;
+    }
+    
+    public void setRecommendedForm() {
+        Form tempForm = new Form("Recommended For You", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        Button testButton = new Button("Test Recipe");
+        tempForm.add(homeButton);
+        tempForm.add(testButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+        testButton.addActionListener((e) -> 
+        {   
+            setRecipeForm(testRecipe);
+            recipeForm.show();
+        });
+
+        recommendedForm = tempForm;
+    }
+    
+    public void setGroceryListForm() {
+        Form tempForm = new Form("Grocery List", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        tempForm.add(homeButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+
+        groceryListForm = tempForm;
+    }
+    
+    public void setSearchForm() {
+        Form tempForm = new Form("Search", BoxLayout.y());
+        Button homeButton = new Button("Home");
+        tempForm.add(homeButton);
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+
+        searchForm = tempForm;
     }
 
     public void setSavedRecipesForm() {
@@ -164,9 +261,6 @@ public class MealThymePlanner {
         tempForm.add(allergiesButton);
         tempForm.add(doneLabel);
         tempForm.add(doneButton);
-        
-       // Label tester = new Label(currentUser.getLikedCuisines().toString());
-       // tempForm.add(tester);
 
         cuisineButton.addActionListener((e) -> favoriteCuisinesForm.show());
         allergiesButton.addActionListener((e) -> allergiesForm.show());
@@ -188,18 +282,18 @@ public class MealThymePlanner {
 
         tempForm.add(favoriteLabel);
         for (CheckBox c : cuisineCheckBoxes) {
+            c.setToggle(true);
             tempForm.add(c);
         }
         tempForm.add(backButton);
 
-        backButton.addActionListener((e)
-                -> {            
+        backButton.addActionListener((e) -> {
+
             for (CheckBox c : cuisineCheckBoxes) {
                 if (c.isSelected()) {
-                    currentUser.addLikedCuisine(c.getName());
+                    currentUser.addLikedCuisine(c.getText());
                 }
             }
-            System.out.println(currentUser.getLikedCuisines().toString());
             newUserForm.show();
         });
 
@@ -209,11 +303,31 @@ public class MealThymePlanner {
     public void setAllergiesForm() {
         Form tempForm = new Form("Allergies", BoxLayout.y());
 
+        Label allergyLabel = new Label("Please check any allergies.");
+
+        ArrayList<CheckBox> allergyCheckBoxes = new ArrayList<>();
+        for (String a : allergies) {
+            allergyCheckBoxes.add(new CheckBox(a));
+        }
+
         Button backButton = new Button("Back");
 
+        tempForm.add(allergyLabel);
+        for (CheckBox c : allergyCheckBoxes) {
+            c.setToggle(true);
+            tempForm.add(c);
+        }
         tempForm.add(backButton);
 
-        backButton.addActionListener((e) -> newUserForm.show());
+        backButton.addActionListener((e) -> {
+
+            for (CheckBox c : allergyCheckBoxes) {
+                if (c.isSelected()) {
+                    currentUser.addRestrictedIngredient(c.getText());
+                }
+            }
+            newUserForm.show();
+        });
 
         allergiesForm = tempForm;
     }
@@ -229,7 +343,10 @@ public class MealThymePlanner {
         setFavoriteCuisineForm();
         setAllergiesForm();
         setProfileForm();
-
+        setBrowseForm();
+        setRecommendedForm();
+        setGroceryListForm();
+        setSearchForm();
     }
 
     public void init(Object context) {

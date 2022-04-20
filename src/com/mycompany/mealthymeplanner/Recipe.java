@@ -6,22 +6,28 @@ public class Recipe {
 
     private String name;
     private ArrayList<RecipeIngredient> ingredients;
-    private ArrayList<String> steps;
+    private ArrayList<String> directions;
     private String servings;
-    //private int calories;
+    private int calories;
     private float cookTimeMinutes;
     private ArrayList<RecipeTag> recipeTags;
 
     public Recipe() {
-        this("No Name", new ArrayList<RecipeIngredient>(), new ArrayList<String>(), "", 0, new ArrayList<RecipeTag>());
+        this.name = "no Name";
+        this.ingredients = new ArrayList<>();
+        this.directions = new ArrayList<>();
+        this.servings = "Unknown";
+        this.calories = 0;
+        this.cookTimeMinutes = 0;
+        this.recipeTags = new ArrayList<>();
     }
 
-    public Recipe(String name, ArrayList<RecipeIngredient> ingredients, ArrayList<String> steps, String servings, float cookTimeMinutes, ArrayList<RecipeTag> recipeTags) {
+    public Recipe(String name, ArrayList<RecipeIngredient> ingredients, ArrayList<String> directions, String servings, int calories, float cookTimeMinutes, ArrayList<RecipeTag> recipeTags) {
         this.name = name;
         this.ingredients = ingredients;
-        this.steps = steps;
+        this.directions = directions;
         this.servings = servings;
-        //this.calories = calories;
+        this.calories = calories;
         this.cookTimeMinutes = cookTimeMinutes;
         this.recipeTags = recipeTags;
     }
@@ -42,12 +48,12 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public ArrayList<String> getSteps() {
-        return steps;
+    public ArrayList<String> getDirections() {
+        return directions;
     }
 
-    public void setSteps(ArrayList<String> steps) {
-        this.steps = steps;
+    public void setDirections(ArrayList<String> directions) {
+        this.directions = directions;
     }
 
     public String getServings() {
@@ -58,12 +64,14 @@ public class Recipe {
         this.servings = servings;
     }
 
-    //public int getCalories() {
-    //    return calories;
-    //}
-    //public void setCalories(int calories) {
-    //    this.calories = calories;
-    //}
+    public int getCalories() {
+        return calories;
+    }
+    
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+    
     public float getCookTimeMinutes() {
         return cookTimeMinutes;
     }

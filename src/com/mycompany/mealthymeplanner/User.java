@@ -8,64 +8,42 @@ package com.mycompany.mealthymeplanner;
 import java.util.*;
 
 public class User {
-    
-    private String name;
-    private ArrayList<IngredientTag> hard_no;
+
+    private ArrayList<String> likedCuisines;
+    private ArrayList<String> restrictedIngredients;
     private ArrayList<IngredientTag> preferences;
     private HashMap<Recipe, Double> algorithmScore;
     private HashMap<Recipe, Integer> userRatings;
     private HashMap<Recipe, Integer> timeSinceLastMade;
-    private ArrayList<Recipe> prioritizedRecipes;    
+    private ArrayList<Recipe> prioritizedRecipes;
     private HashMap<String, Preference> ingredientPrefs;
     private HashMap<RecipeTag, Preference> attributePrefs;
     private boolean newUser;
-    private ArrayList<String> likedCuisines;
-            
-public User()
-    {
-        this.name = "No Name";
-        this.hard_no = new ArrayList<>();
+
+    public User() {
+        this.likedCuisines = new ArrayList<>();
+        this.restrictedIngredients = new ArrayList<>();
         this.preferences = new ArrayList<>();
         this.algorithmScore = new HashMap<>();
         this.userRatings = new HashMap<>();
         this.timeSinceLastMade = new HashMap<>();
         this.prioritizedRecipes = new ArrayList<>();
-        this.ingredientPrefs =  new HashMap<>();
-        this.attributePrefs =  new HashMap<>();
+        this.ingredientPrefs = new HashMap<>();
+        this.attributePrefs = new HashMap<>();
         this.newUser = true;
-        this.likedCuisines = new ArrayList<>();
     }
 
-    public User(String name, ArrayList<IngredientTag> hard_no, ArrayList<IngredientTag> preferences, 
-            HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, 
-            HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, 
-            HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs,
-            boolean newUser, ArrayList<String> likedCuisines) {
-        this.name = name;
-        this.hard_no = hard_no;
+    public User(ArrayList<String> likedCuisines, ArrayList<String> restrictedIngredients, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs, boolean newUser) {
+        this.likedCuisines = likedCuisines;
+        this.restrictedIngredients = restrictedIngredients;
         this.preferences = preferences;
         this.algorithmScore = algorithmScore;
         this.userRatings = userRatings;
         this.timeSinceLastMade = timeSinceLastMade;
         this.prioritizedRecipes = prioritizedRecipes;
+        this.ingredientPrefs = ingredientPrefs;
+        this.attributePrefs = attributePrefs;
         this.newUser = newUser;
-        this.likedCuisines = likedCuisines;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ArrayList<IngredientTag> getHard_no() {
-        return hard_no;
-    }
-
-    public void setHard_no(ArrayList<IngredientTag> hard_no) {
-        this.hard_no = hard_no;
     }
 
     public ArrayList<IngredientTag> getPreferences() {
@@ -139,25 +117,33 @@ public User()
     public void setLikedCuisines(ArrayList<String> likedCuisines) {
         this.likedCuisines = likedCuisines;
     }
-    
-    public void addLikedCuisine(String cuisine)
-    {
-        if(likedCuisines.contains(cuisine) == false)
-        {
+
+    public ArrayList<String> getRestrictedIngredients() {
+        return restrictedIngredients;
+    }
+
+    public void setRestrictedIngredients(ArrayList<String> restrictedIngredients) {
+        this.restrictedIngredients = restrictedIngredients;
+    }
+
+    // method to add one cuisine to the liked cuisine list if it is not already in the list
+    public void addLikedCuisine(String cuisine) {
+        if (likedCuisines.contains(cuisine) == false) {
             likedCuisines.add(cuisine);
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    public ArrayList<Recipe> algorithm()
-    {
+
+    /* Method to add one restricted ingredient (allergy or custome ingredient) 
+    * to the restricted ingredient list if it is not already in the list
+     */
+    public void addRestrictedIngredient(String restrIngred) {
+        if (restrictedIngredients.contains(restrIngred) == false) {
+            likedCuisines.add(restrIngred);
+        }
+    }
+
+    public ArrayList<Recipe> algorithm() {
         return new ArrayList<Recipe>();
     }
-    
 
 }
