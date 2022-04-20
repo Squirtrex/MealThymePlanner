@@ -1,4 +1,3 @@
-
 /**
  * @author Nicholas Pepin
  */
@@ -14,7 +13,7 @@ public class CSV_to_HashMap {
 	//These are the ArrayLists I used for storage
 	ArrayList<RecipeIngredient> ingredients = new ArrayList<>();
 	ArrayList<IngredientTag> ingredientTags = new ArrayList<>();
-        ArrayList<RecipeTag> recipeTags = new ArrayList<>();
+    ArrayList<RecipeTag> recipeTags = new ArrayList<>();
 	ArrayList<String> steps = new ArrayList<>();
 	HashMap<String, Recipe> recipes = new HashMap<>();
 	
@@ -28,7 +27,7 @@ public class CSV_to_HashMap {
 		char[] chars = str.toCharArray();
 		for(char c : chars) {
 			if(Character.isDigit(c)) {
-				amount += Double.valueOf(String.valueOf(c));
+				amount += Double.parseDouble(String.valueOf(c));
 				if(str.contains("⅓")) {
 					amount += (double) 1/3; 
 				}if(str.contains("½")) {
@@ -87,97 +86,94 @@ public class CSV_to_HashMap {
 		return ingredients;
 	}
         
-	
-	public static void main(String[] args) throws IOException, URISyntaxException{
+	public CSV_to_HashMap() throws IOException, URISyntaxException{
 		//This allows the class to use other methods inside of the file
 		CSV_to_HashMap hm = new CSV_to_HashMap();
-		
+
 		String name = "";
 		float cookTime;
 		String servingSize;
 		String imgpath = null;
 		ArrayList<RecipeIngredient> In;
-		
+
 		URL path = ClassLoader.getSystemResource("Welsh.csv");
 		File file = new File(path.toURI());
-		
+
 		//Find a way to read from Data folder universally.
 		//File dir = new File("/eclipse-workspace/Meal Prep App/src/Data");
 		//File[] files = dir.listFiles();
 		//for(File file : files) {
-			//if(file.isFile()) {
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-				    String line="";
-				    String sub ="";
-				    
-				    int iend = 0;
-				    
-				    //ignored first line
-				    br.readLine();
-				    //Loops through the csv file
-				    while ((line = br.readLine()) != null) {
-				    	//Goes from comma to comma
-				    	iend = line.indexOf(",");
-				    	if(iend != -1) {
-				    		//Finds the name of the recipe and trims the fat.
-				    		name = line.substring(0, iend);
-				    		name = name.replaceAll("\"", "");
-				    		name = name.trim();
-				    		//Moves to next comma
-				    		line = line.substring(line.indexOf(",")+1);
-				    		//Finds the cook time of the recipe
-				    		cookTime = Float.parseFloat(line.substring(0, line.indexOf(",")));
-				    		//moves to the next comma
-				    		line = line.substring(line.indexOf(",")+1);
-				    		//Finds the serving size
-				    		servingSize = line.substring(0,line.indexOf(","));
-				    		servingSize = servingSize.trim();
-				    		//Moves to the next single-quote
-				    		line = line.substring(line.indexOf("'")+1);
-				    		//Loops through the ingredients and parses out the ingredients
-				    		while(!sub.contains("]")) {
-				    			sub = line.substring(0,line.indexOf("'"));
-				    			sub = sub.replaceAll("\"", "");
-				    			sub = sub.replaceAll(",", "");
-				    			line = line.substring(line.indexOf("'")+1);
-				    			//Takes the str of the line of the ingredient and passes it onto the Ing method.
-				    			hm.Ing(sub);
-				    		}
-				    		sub = line.substring(0,line.indexOf("'"));
-				    		sub = sub.replaceAll("\"", "");
-			    			sub = sub.replaceAll(",", "");
-				    		hm.steps.add(sub);
-				    		line = line.substring(line.indexOf("'")+1);
-				    		while(!sub.contains("]")) {
-				    			sub = line.substring(0,line.indexOf("'"));
-				    			sub = sub.replaceAll("\"", "");
-				    			sub = sub.replaceAll(",", "");
-				    			line = line.substring(line.indexOf("'")+1);
-				    			hm.steps.add(sub);
-				    		}
-				    		imgpath = sub.replaceAll("\\{", "").replaceAll("\\]", "");
-				    		sub = line.substring(0,line.indexOf(","));
-				    		/**
-				    		 * If we want to implement Nutrition label, this is where we do it
-				    		 *
-				    		 *
-				    		 *
-				    		 *
-				    		 */
-				    		//Creates recipe object out of the data.
-        
-        
-				    		Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.recipeTags);
-				    		//Puts recipe object into HashMap using title as key.
-				    		hm.recipes.put(name,recipe);
-				    	}
-				    }
-				}catch(IOException e) {
-					System.out.println(e);
+		//if(file.isFile()) {
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			String line="";
+			String sub ="";
+
+			int iend = 0;
+
+			//ignored first line
+			br.readLine();
+			//Loops through the csv file
+			while ((line = br.readLine()) != null) {
+				//Goes from comma to comma
+				iend = line.indexOf(",");
+				if(iend != -1) {
+					//Finds the name of the recipe and trims the fat.
+					name = line.substring(0, iend);
+					name = name.replaceAll("\"", "");
+					name = name.trim();
+					//Moves to next comma
+					line = line.substring(line.indexOf(",")+1);
+					//Finds the cook time of the recipe
+					cookTime = Float.parseFloat(line.substring(0, line.indexOf(",")));
+					//moves to the next comma
+					line = line.substring(line.indexOf(",")+1);
+					//Finds the serving size
+					servingSize = line.substring(0,line.indexOf(","));
+					servingSize = servingSize.trim();
+					//Moves to the next single-quote
+					line = line.substring(line.indexOf("'")+1);
+					//Loops through the ingredients and parses out the ingredients
+					while(!sub.contains("]")) {
+						sub = line.substring(0,line.indexOf("'"));
+						sub = sub.replaceAll("\"", "");
+						sub = sub.replaceAll(",", "");
+						line = line.substring(line.indexOf("'")+1);
+						//Takes the str of the line of the ingredient and passes it onto the Ing method.
+						hm.Ing(sub);
+					}
+					sub = line.substring(0,line.indexOf("'"));
+					sub = sub.replaceAll("\"", "");
+					sub = sub.replaceAll(",", "");
+					hm.steps.add(sub);
+					line = line.substring(line.indexOf("'")+1);
+					while(!sub.contains("]")) {
+						sub = line.substring(0,line.indexOf("'"));
+						sub = sub.replaceAll("\"", "");
+						sub = sub.replaceAll(",", "");
+						line = line.substring(line.indexOf("'")+1);
+						hm.steps.add(sub);
+					}
+					imgpath = sub.replaceAll("\\{", "").replaceAll("\\]", "");
+					sub = line.substring(0,line.indexOf(","));
+					/**
+					 * If we want to implement Nutrition label, this is where we do it
+					 *
+					 *
+					 *
+					 *
+					 */
+					//Creates recipe object out of the data.
+					Recipe recipe = new Recipe(name, hm.ingredients, hm.steps, servingSize, cookTime, hm.recipeTags);
+					//Puts recipe object into HashMap using title as key.
+					hm.recipes.put(name,recipe);
 				}
 			}
+		}catch(IOException e) {
+			System.out.println(e);
+		}
 		//}
-	//}
+		//}
+	}
 
 }
 
