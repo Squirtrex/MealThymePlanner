@@ -8,7 +8,6 @@ package com.mycompany.mealthymeplanner;
  * These are the imports I used for the database creation
  */
 import com.codename1.io.*;
-import com.codename1.io.Externalizable;
 import com.codename1.ui.*;
 import com.codename1.util.regex.*;
 import java.io.*;
@@ -17,14 +16,7 @@ import java.util.*;
 /**
  * This class reads a .csv file into a HashMap and stores it in the App's memory for faster loading and referencing.
  */
-public class CSV_to_HashMap implements Externalizable {
-
-    /**
-     * These are variables used by Externalizable.
-     */
-    private static final int VERSION = 0;
-    private Date startedAt;
-    private String Name;
+public class CSV_to_HashMap extends HashMap<String, Recipe> {
 
     /**
      * Storage structures used.
@@ -83,11 +75,15 @@ public class CSV_to_HashMap implements Externalizable {
         }catch(IOException err) {
             Log.e(err);
         }
-
         //This is to test hashmap functionality.
         //tester();
-
     }
+    
+    /**
+     * This gives the hashmap to other files.
+     * @return
+     */
+    HashMap<String, Recipe> getHashMap(){ return recipes; }
     
     /**
      * Clears the recipe tags lists after the recipe is put into the hashmap.
@@ -272,37 +268,4 @@ public class CSV_to_HashMap implements Externalizable {
         RecipeIngredient ingredient = new RecipeIngredient(amount, amountType, ing);
         ingredients.add(ingredient);
     }
-
-    /**
-     * Necessary methods for for Externalize. The rest of these are for cacheing the HashMap into codename One's Storage.
-     * @return
-     */
-    public int getVersion(){ return VERSION; }
-
-    public void externalize(DataOutputStream out) throws IOException {
-        Util.writeUTF(Name, out);
-        Util.writeObject(recipes, out);
-        if(startedAt != null) {
-            out.writeBoolean(true);
-            out.writeLong(startedAt.getTime());
-        } else {
-            out.writeBoolean(false);
-        }
-    }
-
-    public void internalize(int version, DataInputStream in) throws IOException {
-        Name = Util.readUTF(in);
-        recipes = (HashMap<String, Recipe>)Util.readObject(in);
-        if(version > 1) {
-            boolean hasDate = in.readBoolean();
-            if(hasDate) {
-                startedAt = new Date(in.readLong());
-            }
-        }
-    }
-
-    public String getObjectId(){
-        return "CSV_to_HashMap";
-    }
-
 }
