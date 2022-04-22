@@ -8,7 +8,7 @@ public class Recipe {
     private ArrayList<RecipeIngredient> ingredients;
     private ArrayList<String> directions;
     private String servings;
-    private int calories;
+    private double calories;
     private float cookTimeMinutes;
     private ArrayList<RecipeTag> recipeTags;
 
@@ -22,7 +22,7 @@ public class Recipe {
         this.recipeTags = new ArrayList<>();
     }
 
-    public Recipe(String name, ArrayList<RecipeIngredient> ingredients, ArrayList<String> directions, String servings, int calories, float cookTimeMinutes, ArrayList<RecipeTag> recipeTags) {
+    public Recipe(String name, ArrayList<RecipeIngredient> ingredients, ArrayList<String> directions, String servings, double calories, float cookTimeMinutes, ArrayList<RecipeTag> recipeTags) {
         this.name = name;
         this.ingredients = ingredients;
         this.directions = directions;
@@ -64,11 +64,11 @@ public class Recipe {
         this.servings = servings;
     }
 
-    public int getCalories() {
+    public double getCalories() {
         return calories;
     }
     
-    public void setCalories(int calories) {
+    public void setCalories(double calories) {
         this.calories = calories;
     }
     
