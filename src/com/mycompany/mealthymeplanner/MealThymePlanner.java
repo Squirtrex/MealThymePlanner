@@ -65,7 +65,7 @@ public class MealThymePlanner {
     public void initializeHashMap(){
         try {
             CSV_to_HashMap h = new CSV_to_HashMap();
-            hashmap = h;
+            hashmap = h.getHashMap();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
