@@ -1,10 +1,6 @@
 package com.mycompany.mealthymeplanner;
 
-/**
- * This is important for Externalizable.
- * Nick P.
- */
-import com.codename1.io.Util;
+
 import com.codename1.components.SpanLabel;
 import static com.codename1.ui.CN.*;
 import com.codename1.ui.Display;
@@ -34,6 +30,11 @@ import java.util.Arrays;
  */
 public class MealThymePlanner {
 
+    /**
+     * This holds the hashmap after being initialized.
+     */
+    HashMap<String, Recipe> hashmap;
+    
     private Form currentForm;
     private Form previousForm;
     private Resources theme;
@@ -58,6 +59,18 @@ public class MealThymePlanner {
     private ArrayList<String> allergies = new ArrayList<>(Arrays.asList("Dairy", "Gluten", "Nuts", "Shellfish"));
     private Recipe testRecipe = new Recipe("Test Name", new ArrayList<RecipeIngredient>(), new ArrayList<String>(), "5 servings", 800, 30, new ArrayList<RecipeTag>());
 
+    /**
+     * This builds the hashmap and places it into the hashmap variable.
+     */
+    public void initializeHashMap(){
+        try {
+            CSV_to_HashMap h = new CSV_to_HashMap();
+            hashmap = h;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     public void setMainMenuForm() {
         Form tempForm = new Form("Main Menu", new GridLayout(4, 2));
         Button recommendedButton = new Button("Recommended For You");
@@ -355,6 +368,12 @@ public class MealThymePlanner {
     }
 
     public void init(Object context) {
+        
+        /**
+         * This sets up the hashmap off startup.
+         */
+        initializeHashMap();
+        
         // use two network threads instead of one
         updateNetworkThreadCount(2);
 
@@ -378,19 +397,6 @@ public class MealThymePlanner {
     }
 
     public void start() {
-        
-        /**
-         * This runs the CSV_to_HashMap file.
-         * Nick P.
-         */
-        try {
-            CSV_to_HashMap hashmap = new CSV_to_HashMap();
-        }catch(IOException e){
-            System.out.println("Error: "+e);
-        }
-        //This runs the externalizable methods to save the HashMap.
-        Util.register("CSV_to_HashMap", CSV_to_HashMap.class);
-        
         
         setUpForms();
 
