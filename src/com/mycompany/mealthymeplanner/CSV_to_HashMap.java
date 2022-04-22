@@ -76,6 +76,7 @@ public class CSV_to_HashMap implements Externalizable {
                         }
                         Recipe recipe = new Recipe(name, ingredients, steps, servingSize,calories, cookTime, recipeTags);
                         recipes.put(name, recipe);
+                        Clear();
                     }
                 }
             }
@@ -86,6 +87,16 @@ public class CSV_to_HashMap implements Externalizable {
         //This is to test hashmap functionality.
         //tester();
 
+    }
+    
+    /**
+     * Clears the recipe tags lists after the recipe is put into the hashmap.
+     */
+    private void Clear(){
+        ingredients.clear();
+        ingredientTags.clear();
+        steps.clear();
+        recipeTags.clear();
     }
 
     /**
