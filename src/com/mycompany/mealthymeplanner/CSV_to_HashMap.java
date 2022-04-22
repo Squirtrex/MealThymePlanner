@@ -10,9 +10,9 @@ package com.mycompany.mealthymeplanner;
 import com.codename1.io.*;
 import com.codename1.io.Externalizable;
 import com.codename1.ui.*;
+import com.codename1.util.regex.*;
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 
 /**
  * This class reads a .csv file into a HashMap and stores it in the App's memory for faster loading and referencing.
@@ -118,12 +118,14 @@ public class CSV_to_HashMap implements Externalizable {
      */
     private void parseIngredients(String text){
         String ingredient = "";
-        Pattern p = Pattern.compile("'([^']*)'");
-        Matcher m = p.matcher(text);
-        while(m.find()){
-            ingredient = m.group();
-            ingredient = ingredient.replaceAll("'","");
-            tagIngredients(ingredient);
+        int index = 0;
+        RE re = new RE("'([^']*)'");
+        while(re.match(text, index)){
+            for(int i=0;i<re.getParenCount();i++){
+                ingredient = re.getParen(i);
+                if(!ingredient.contains(",") && !ingredient.contains("'")){tagIngredients(ingredient); }
+            }
+            index = re.getParenEnd(re.getParenCount()-1);
         }
     }
 
@@ -133,12 +135,14 @@ public class CSV_to_HashMap implements Externalizable {
      */
     private void parseSteps(String text){
         String step = "";
-        Pattern p = Pattern.compile("'([^']*)'");
-        Matcher m = p.matcher(text);
-        while(m.find()){
-            step = m.group();
-            step = step.replaceAll("'","");
-            steps.add(step);
+        int index = 0;
+        RE re = new RE("'([^']*)'");
+        while(re.match(text,index)){
+            for(int i=0;i<re.getParenCount();i++){
+                step = re.getParen(i);
+                if(!step.contains("'") && step.length()!=2){ steps.add(step);}
+            }
+            index = re.getParenEnd(re.getParenCount()-1);
         }
     }
 
@@ -150,20 +154,26 @@ public class CSV_to_HashMap implements Externalizable {
     private double parseCalories(String text){
         double cal = 0;
         String nut = "";
+        String[] c = new String[2];
         int count = 0;
-        Pattern p = Pattern.compile("'([^']*)'");
-        Matcher m = p.matcher(text);
-        while(m.find()){
-            nut = m.group();
-            if(nut.contains("calorie")){
-                count++;
+        int index = 0;
+        RE re = new RE("'([^']*)'");
+        RE re2 = new RE("[:space:]");
+        while(re.match(text, index)){
+            for(int i=0;i<re.getParenCount();i++) {
+                nut = re.getParen(i);
+                if (nut.contains("calorie")) {
+                    count++;
+                }
+                if (count == 2 && nut.contains("calorie")) {
+                    count = 0;
+                    if(re2.match(nut)){
+                        c = re2.split(nut);
+                        if(c[0]!=null && c[0]!="0.0"){cal = Double.parseDouble(c[0]);return cal;}
+                    }
+                }
             }
-            if(count==2 && nut.contains("calorie")){
-                count=0;
-                Matcher m2 = Pattern.compile("(?!=\\d\\.\\d\\.)([\\d.]+)").matcher(nut);
-                m2.find();
-                cal = Double.parseDouble(m2.group());
-            }
+            index = re.getParenEnd(re.getParenCount()-1);
         }
         return cal;
     }
