@@ -1,5 +1,10 @@
 package com.mycompany.mealthymeplanner;
 
+/**
+ * This is important for Externalizable.
+ * Nick P.
+ */
+import com.codename1.io.Util;
 import com.codename1.components.SpanLabel;
 import static com.codename1.ui.CN.*;
 import com.codename1.ui.Display;
@@ -373,7 +378,20 @@ public class MealThymePlanner {
     }
 
     public void start() {
-
+        
+        /**
+         * This runs the CSV_to_HashMap file.
+         * Nick P.
+         */
+        try {
+            CSV_to_HashMap hashmap = new CSV_to_HashMap();
+        }catch(IOException e){
+            System.out.println("Error: "+e);
+        }
+        //This runs the externalizable methods to save the HashMap.
+        Util.register("CSV_to_HashMap", CSV_to_HashMap.class);
+        
+        
         setUpForms();
 
         if (currentUser.isNewUser()) {
