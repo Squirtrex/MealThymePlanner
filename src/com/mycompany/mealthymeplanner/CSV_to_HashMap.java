@@ -41,18 +41,17 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         double calories = 0;
         float cookTime = 0;
 
-        String[] files = {"/African.csv","/American.csv","/MiddleEastern.csv","/Asian.csv","/French.csv","/Italian.csv","/Mexican.csv"};
+        String[] files = {"/American.csv","/Italian.csv","/Mexican.csv", "/MiddleEastern","/Asian.csv","/African.csv",};
 
         try {
             for (String file : files) {
                 InputStream is = Display.getInstance().getResourceAsStream(this.getClass(), file);
-                if(file.contains("African")){recipeTags.add(RecipeTag.African); }
-                else if(file.contains("American")){recipeTags.add(RecipeTag.American); }
-                else if(file.contains("MiddleEastern")){recipeTags.add(RecipeTag.Middle_Eastern); }
-                else if(file.contains("Asian")){recipeTags.add(RecipeTag.Asian); }
-                else if(file.contains("French")){recipeTags.add(RecipeTag.French); }
-                else if(file.contains("Italian")){recipeTags.add(RecipeTag.Italian); }
-                else if(file.contains("Mexican")){recipeTags.add(RecipeTag.Mexican); }
+                if(file.contains("American")){ recipeTags.add(RecipeTag.American); }
+                else if(file.contains("Italian")){ recipeTags.add(RecipeTag.Italian); }
+                else if(file.contains("Mexican")){ recipeTags.add(RecipeTag.Mexican); }
+                else if(file.contains("MiddleEastern")){ recipeTags.add(RecipeTag.Middle_Eastern); }
+                else if(file.contains("Asian")){ recipeTags.add(RecipeTag.Asian); }
+                else if(file.contains("African")){ recipeTags.add(RecipeTag.African); }
                 CSVParser parser = new CSVParser();
                 String[][] data = parser.parse(is);
                 for (int i = 1; i < data.length; i++) {
