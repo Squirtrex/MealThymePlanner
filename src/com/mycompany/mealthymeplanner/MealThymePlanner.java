@@ -4,17 +4,13 @@ package com.mycompany.mealthymeplanner;
 import com.codename1.components.SpanLabel;
 import static com.codename1.ui.CN.*;
 
-import com.codename1.ui.Form;
-import com.codename1.ui.Dialog;
-import com.codename1.ui.Label;
+import com.codename1.ui.*;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.io.Log;
-import com.codename1.ui.Toolbar;
+
 import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.Button;
-import com.codename1.ui.CheckBox;
 import com.codename1.ui.layouts.GridLayout;
 
 import java.util.ArrayList;
@@ -50,12 +46,14 @@ public class MealThymePlanner {
     private Form searchForm;
     private Form recipeForm;
 
+    // Replace with actual User later
     private User currentUser = new User();
     private ArrayList<String> cuisineTypes = new ArrayList<>(Arrays.asList("Italian", "Mexican", "American", "Asian", "African", "Middle Eastern"));
     private ArrayList<String> allergies = new ArrayList<>(Arrays.asList("Dairy", "Gluten", "Nuts", "Shellfish"));
 
-     Ingredient testIngred1 = new Ingredient("Test Ingred 1");
-     RecipeIngredient testRecipeIngred1 = new RecipeIngredient(4.0, "cups", testIngred1);
+    //Tester objects, delete later
+    Ingredient testIngred1 = new Ingredient("Test Ingred 1");
+    RecipeIngredient testRecipeIngred1 = new RecipeIngredient(4.0, "cups", testIngred1);
     private ArrayList<RecipeIngredient> testArray = new ArrayList<>(Arrays.asList(testRecipeIngred1, testRecipeIngred1));
     private Recipe testRecipe1 = new Recipe("Test Recipe 1", testArray, new ArrayList<String>(), "3 servings", 300, 30, new ArrayList<RecipeTag>());
     private Recipe testRecipe2 = new Recipe("Test Recipe 2", testArray, new ArrayList<String>(), "5 servings", 500, 50, new ArrayList<RecipeTag>());
@@ -72,7 +70,8 @@ public class MealThymePlanner {
             ex.printStackTrace();
         }
     }
-    
+
+    //Method builds the Main menu form
     public void setMainMenuForm() {
         Form tempForm = new Form("Main Menu", new GridLayout(3, 2));
         Button recommendedButton = new Button("Recommended");
@@ -277,12 +276,64 @@ public class MealThymePlanner {
 
     public void setAddCustomRecipeForm() {
         Form tempForm = new Form("Add Custom Recipe", BoxLayout.y());
-        Button homeButton = new Button("Home");
-        Button backButton = new Button("Back");
-        tempForm.add(homeButton);
-        tempForm.add(backButton);
-        homeButton.addActionListener((e) -> mainMenuForm.show());
-        backButton.addActionListener((e) -> savedRecipesForm.show());
+        Recipe newRecipe = new Recipe();
+
+        SpanLabel instructLabel = new SpanLabel("Please fill in the following information.");
+        Label recipeNameLabel = new Label("Recipe Name: ");
+        TextField nameField = new TextField("", "Recipe Name", 40, TextArea.ANY);
+        Label servingsLabel = new Label("Servings: ");
+        TextField servingsField = new TextField("", "Servings", 5, TextArea.NUMERIC);
+        Label caloriesLabel = new Label("Calories: ");
+        TextField caloriesField = new TextField("", "Calories", 5, TextArea.NUMERIC);
+        Label cookTimeLabel = new Label("Cook Time (min): " );
+        TextField cookTimeField = new TextField("", "Cook Time", 5, TextArea.NUMERIC);
+        Label ingrLabel = new Label("Ingredients: ");
+        TextField ingrField = new TextField("", "Ingredient", 40, TextArea.ANY);
+        Button addIngredientButton = new Button("+ Ingredient");
+
+
+
+        /*
+        // Used to split up ingredients into their respective parts, implement later
+        TextField ingrAmountField = new TextField("", "Amount", 10, TextArea.NUMERIC);
+        TextField ingrAmountTypeField = new TextField("", "Type (ex. cups)", 12, TextArea.ANY);
+        TextField ingrNameField = new TextField("", "Ingredient", 20, TextArea.ANY);
+        Container IngredContainer = BoxLayout.encloseX(ingrAmountField, ingrAmountTypeField, ingrNameField);
+        */
+
+
+
+
+
+
+
+        Button addButton = new Button("Add");
+        Button cancelButton = new Button("Cancel");
+
+        tempForm.add(instructLabel);
+        tempForm.add(recipeNameLabel);
+        tempForm.add(nameField);
+        tempForm.add(servingsLabel);
+        tempForm.add(servingsField);
+        tempForm.add(caloriesLabel);
+        tempForm.add(caloriesField);
+        tempForm.add(cookTimeLabel);
+        tempForm.add(cookTimeField);
+        tempForm.add(ingrLabel);
+        tempForm.add(ingrField);
+        tempForm.add(addButton);
+        tempForm.add(cancelButton);
+
+
+
+        addButton.addActionListener((e) ->
+        {
+            newRecipe.setName(nameField.getText());
+
+            currentUser.addCustomRecipe(newRecipe);
+            mainMenuForm.show();
+        });
+        cancelButton.addActionListener((e) -> savedRecipesForm.show());
 
         addCustomRecipeForm = tempForm;
     }

@@ -19,6 +19,7 @@ public class User {
     private HashMap<String, Preference> ingredientPrefs;
     private HashMap<RecipeTag, Preference> attributePrefs;
     private boolean newUser;
+    private  HashMap<String, Recipe> customRecipes;
 
     public User() {
         this.likedCuisines = new ArrayList<>();
@@ -31,9 +32,10 @@ public class User {
         this.ingredientPrefs = new HashMap<>();
         this.attributePrefs = new HashMap<>();
         this.newUser = true;
+        this.customRecipes = new HashMap<>();
     }
 
-    public User(ArrayList<String> likedCuisines, ArrayList<String> restrictedIngredients, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs, boolean newUser) {
+    public User(ArrayList<String> likedCuisines, ArrayList<String> restrictedIngredients, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<Recipe, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs, boolean newUser, HashMap<String, Recipe> customRecipes) {
         this.likedCuisines = likedCuisines;
         this.restrictedIngredients = restrictedIngredients;
         this.preferences = preferences;
@@ -44,6 +46,7 @@ public class User {
         this.ingredientPrefs = ingredientPrefs;
         this.attributePrefs = attributePrefs;
         this.newUser = newUser;
+        this.customRecipes = customRecipes;
     }
 
     public ArrayList<IngredientTag> getPreferences() {
@@ -126,6 +129,14 @@ public class User {
         this.restrictedIngredients = restrictedIngredients;
     }
 
+    public HashMap<String, Recipe> getCustomRecipes() {
+        return customRecipes;
+    }
+
+    public void setCustomRecipes(HashMap<String, Recipe> customRecipes) {
+        this.customRecipes = customRecipes;
+    }
+
     // method to add one cuisine to the liked cuisine list if it is not already in the list
     public void addLikedCuisine(String cuisine) {
         if (likedCuisines.contains(cuisine) == false) {
@@ -140,6 +151,11 @@ public class User {
         if (restrictedIngredients.contains(restrIngred) == false) {
         restrictedIngredients.add(restrIngred);
         }
+    }
+
+    public void addCustomRecipe(Recipe rec)
+    {
+        customRecipes.put(rec.getName(), rec);
     }
 
     public ArrayList<Recipe> algorithm() {
