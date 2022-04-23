@@ -41,7 +41,7 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         double calories = 0;
         float cookTime = 0;
 
-        String[] files = {"/American.csv","/Italian.csv","/Mexican.csv", "/MiddleEastern","/Asian.csv","/African.csv",};
+        String[] files = {"/American.csv","/Italian.csv","/Mexican.csv", "/MiddleEastern.csv","/Asian.csv","/African.csv"};
 
         try {
             for (String file : files) {
