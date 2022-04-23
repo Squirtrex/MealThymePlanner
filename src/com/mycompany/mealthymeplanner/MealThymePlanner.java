@@ -31,7 +31,7 @@ public class MealThymePlanner {
      * This holds the hashmap after being initialized.
      */
     HashMap<String, Recipe> hashmap;
-    
+
     private Form currentForm;
     private Form previousForm;
     private Resources theme;
@@ -93,7 +93,11 @@ public class MealThymePlanner {
         browseButton.addActionListener((e) -> browseForm.show());
         searchButton.addActionListener((e) -> searchForm.show());
         futureButton.addActionListener((e) -> futurePlanningForm.show());
-        profileButton.addActionListener((e) -> profileForm.show());
+        profileButton.addActionListener((e) ->
+        {
+            setProfileForm();
+            profileForm.show();
+        });
 
         mainMenuForm = tempForm;
     }
@@ -119,8 +123,9 @@ public class MealThymePlanner {
         for(String direc: recipe.getDirections())
         {
             directionsLabels.add(new Label(direc));
-        }    
+        }
 
+        Button backButton = new Button("Back");
         Button homeButton = new Button("Home");
         
         tempForm.add(recipeNameLabel);
@@ -135,7 +140,9 @@ public class MealThymePlanner {
         for (Label lab : directionsLabels) {
             tempForm.add(lab);
         }        
+        tempForm.add(backButton);
         tempForm.add(homeButton);
+        backButton.addActionListener((e) -> showPreviousForm());
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
         recipeForm = tempForm;
@@ -151,8 +158,24 @@ public class MealThymePlanner {
     }
     
     public void setBrowseForm() {
-        Form tempForm = new Form("Browse", BoxLayout.y());
+        Form tempForm = new Form("Browse", new GridLayout(8, 1));
+
+        Button cuisineButton1 = new Button("Italian");
+        Button cuisineButton2 = new Button("Mexican");
+        Button cuisineButton3 = new Button("American");
+        Button cuisineButton4 = new Button("Asian");
+        Button cuisineButton5 = new Button("African");
+        Button cuisineButton6 = new Button("Middle Eastern");
+        Label blankLabel = new Label("");
         Button homeButton = new Button("Home");
+
+        tempForm.add(cuisineButton1);
+        tempForm.add(cuisineButton2);
+        tempForm.add(cuisineButton3);
+        tempForm.add(cuisineButton4);
+        tempForm.add(cuisineButton5);
+        tempForm.add(cuisineButton6);
+        tempForm.add(blankLabel);
         tempForm.add(homeButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
@@ -185,18 +208,21 @@ public class MealThymePlanner {
         recipe1Button.addActionListener((e) ->
         {   
             setRecipeForm(recRecipe1);
+            setPreviousForm(recommendedForm);
             recipeForm.show();
         });
 
         recipe2Button.addActionListener((e) ->
         {
             setRecipeForm(recRecipe2);
+            setPreviousForm(recommendedForm);
             recipeForm.show();
         });
 
         recipe3Button.addActionListener((e) ->
         {
             setRecipeForm(recRecipe3);
+            setPreviousForm(recommendedForm);
             recipeForm.show();
         });
 
@@ -275,8 +301,14 @@ public class MealThymePlanner {
 
     public void setProfileForm() {
         Form tempForm = new Form("Profile", BoxLayout.y());
+        String allergyString = "Current Allergies: ";
+        for(String allergy: currentUser.getRestrictedIngredients()) {
+            allergyString += (allergy + ", ");
+        }
+        SpanLabel allergiesLabel = new SpanLabel(allergyString);
         Button homeButton = new Button("Home");
 
+        tempForm.add(allergiesLabel);
         tempForm.add(homeButton);
 
         homeButton.addActionListener((e) -> mainMenuForm.show());
@@ -375,6 +407,16 @@ public class MealThymePlanner {
         allergiesForm = tempForm;
     }
 
+    public void setPreviousForm(Form a)
+    {
+        previousForm = a;
+    }
+
+    public void showPreviousForm()
+    {
+        previousForm.show();
+    }
+
     public void setUpForms() {
         setMainMenuForm();
         setFuturePlanningForm();
@@ -396,7 +438,7 @@ public class MealThymePlanner {
         /**
          * This sets up the hashmap off startup.
          */
-       // initializeHashMap();
+        initializeHashMap();
         
         // use two network threads instead of one
         updateNetworkThreadCount(2);

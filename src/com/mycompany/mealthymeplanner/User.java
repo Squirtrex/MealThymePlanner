@@ -138,7 +138,7 @@ public class User {
      */
     public void addRestrictedIngredient(String restrIngred) {
         if (restrictedIngredients.contains(restrIngred) == false) {
-            likedCuisines.add(restrIngred);
+        restrictedIngredients.add(restrIngred);
         }
     }
 
