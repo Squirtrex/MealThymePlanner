@@ -240,6 +240,8 @@ public class MealThymePlanner {
         refreshButton.addActionListener((e) ->
         {
             // INSERT CODE HERE TO REFRESH OPTIONS
+            setRecommendedForm();
+            recommendedForm.show();
         });
 
         homeButton.addActionListener((e) -> mainMenuForm.show());
