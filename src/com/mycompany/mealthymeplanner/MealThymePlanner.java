@@ -190,9 +190,14 @@ public class MealThymePlanner {
         Recipe databaseRecipe = hashmap.get("Gravel Salad");
       //  System.out.println(databaseRecipe.getIngredients());
      //   Recipe recRecipe1 = testRecipe1;
-        Recipe recRecipe1 = databaseRecipe;
+/*        Recipe recRecipe1 = databaseRecipe;
         Recipe recRecipe2 = testRecipe2;
-        Recipe recRecipe3 = testRecipe3;
+        Recipe recRecipe3 = testRecipe3;*/
+
+        Recipe[] topThree = PriorityMachine.simpleRecThree(currentUser, 300, hashmap);
+        Recipe recRecipe1 = topThree[0];
+        Recipe recRecipe2 = topThree[1];
+        Recipe recRecipe3 = topThree[2];
 
         Button recipe1Button = new Button(recRecipe1.getName());
         Button recipe2Button = new Button(recRecipe2.getName());

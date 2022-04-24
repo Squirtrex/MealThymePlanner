@@ -10,17 +10,28 @@ public class PriorityMachine {
     }
 
     public static double calcPriority(User user, Recipe recipe) {
-        int user_rating = user.getUserRatings().get(recipe);
+        //int user_rating = user.getUserRatings().get(recipe.getName());
+        int user_rating = -1;
+        if (user.getUserRatings().get(recipe.getName())==null)
+        {
+            user_rating = 3;
+        }
+        else
+        {
+            user_rating = user.getUserRatings().get(recipe.getName());
+        }
+        user_rating = 3;
+
         ArrayList<RecipeIngredient> ingredients = recipe.getIngredients();
         HashMap<String, Preference> i_prefs = user.getIngredientPrefs();
         HashMap<RecipeTag, Preference> a_prefs = user.getAttributePrefs(); //note: look at what recipetag is
         ArrayList<RecipeTag> recipe_attributes = recipe.getRecipeTags();
-        double i_score = 0.0;
-        double a_score = 0.0;
-        double priority = 0.0;
+        Double i_score = 0.0;
+        Double a_score = 0.0;
+        Double priority = 0.0;
         //double recency_bias = 1 - (1/days_since_making); //how to get days since last make?
 
-        if (user_rating == 0) {
+        if ((user_rating == 0)||(Objects.isNull(user_rating))) {
             user_rating = 3; //unrated should assume average ~~ 3. unrated !=0 stars (terrible rating!)
         }
 
@@ -29,27 +40,65 @@ public class PriorityMachine {
 //        //System.out.println("Recipe vioalted dietary restrictions"); //debug
 //        return -1;
 //      }
-            i_score += i_prefs.get(ri.ingredient.getName()).getPreference();
+
+            //if (i_prefs.get(ri.ingredient.getName()).getPreference() == null)
+            if (i_prefs.get(ri.ingredient.getName()) == null)
+            {
+                i_score += 0;
+            }
+            else
+            {
+                i_score += i_prefs.get(ri.ingredient.getName()).getPreference();
+            }
+            //i_score += 0;
+
         }
 
-        for (RecipeTag rt : recipe_attributes) {
+        for (RecipeTag rt : recipe_attributes)
+        {
 //      if (user.violatesRestrictions(rt)) {
 //        //System.out.println("Recipe vioalted dietary restrictions"); //debug
 //        return -1;
 //      }
-            a_score += a_prefs.get(rt).getPreference();
+
+            //if (a_prefs.get(rt).getPreference() == null)
+            if (a_prefs.get(rt) == null)
+            {
+                a_score += 0;
+            }
+            else
+            {
+                a_score += a_prefs.get(rt).getPreference();
+            }
+
+
+            //a_score += 0;
+
         }
 
-        i_score /= ingredients.size(); //Average of ingredient preferences
-        a_score /= recipe_attributes.size(); //Average of attribute preferences
+/*
+        System.out.println(i_score);
+        System.out.println(a_score);
+*/
+
+//        i_score /= ingredients.size(); //Average of ingredient preferences
+//        a_score /= recipe_attributes.size(); //Average of attribute preferences
+//        System.out.println(recipe_attributes.size());
 
         //priority = (a_score + i_score + user_rating) * recency_bias;
         priority = (a_score + i_score + user_rating);
+        //System.out.println(priority);
+
         return priority;
     }
 
     //Returns top 3 priority recipes from provided recipes array, according to user preferences.
-    private Recipe[] getTopThree(User user, Recipe[] recipes) {
+    private static Recipe[] getTopThree(User user, Recipe[] recipes) {
+
+/*        System.out.println(recipes[0].getName());
+        System.out.println(recipes[1].getName());
+        System.out.println(recipes[2].getName());*/
+
         Recipe first = new Recipe(); //default init
         Recipe second = new Recipe(); //default init
         Recipe third = new Recipe(); //default init
@@ -57,12 +106,14 @@ public class PriorityMachine {
         double second_p = -1;
         double third_p = -1;
 
-        double current_p;
+        Double current_p;
 
         Recipe[] top_three = new Recipe[3];
 
         for (Recipe r : recipes) {
+
             current_p = calcPriority(user, r);
+            //System.out.println("Calc P for " + r.getName() + ": " + current_p);
             if (current_p > first_p) {
                 third_p = second_p;
                 second_p = first_p;
@@ -92,14 +143,14 @@ public class PriorityMachine {
 
     }
 
-    public Recipe[] simpleRecThree(User user, int sample_size) {
+    public static Recipe[] simpleRecThree(User user, int sample_size, HashMap<String, Recipe> all_recipes) {
         //ArrayList<Recipe> sample = new ArrayList(sample_size);
-        HashMap<String, Recipe> all_recipes = new HashMap<String, Recipe>(); //Note! Obtain this!
+        //HashMap<String, Recipe> all_recipes = new HashMap<String, Recipe>(); //Note! Obtain this!
         Object[] keys = all_recipes.keySet().toArray();
         String[] keys_copy = new String[all_recipes.size()];
         String[] sampled_keys = new String[sample_size];
         Recipe[] sampled_recipes = new Recipe[sample_size];
-        Recipe[] reccomendations = new Recipe[3];
+        Recipe[] recommendations = new Recipe[3];
 
         //Copy all recipe names into new array to prevent editing original data by mistake.
         for (int i = 0; i < all_recipes.size(); i++) {
@@ -130,9 +181,21 @@ public class PriorityMachine {
 
         //Now we call getTopThree on the sample, which returns three recipes
         //whose priorities were highest in the sample (greatest to least).
-        reccomendations = getTopThree(user, sampled_recipes);
+        recommendations = getTopThree(user, sampled_recipes);
 
-        return reccomendations;
+/*
+        System.out.println(sampled_recipes[0].getName());
+        System.out.println(sampled_recipes[1].getName());
+        System.out.println(sampled_recipes[2].getName());
+
+        System.out.println(recommendations[0].getName());
+        System.out.println(recommendations[1].getName());
+        System.out.println(recommendations[2].getName());
+*/
+
+
+
+        return recommendations;
     }
 
     //whenever a user rates a recipe this should be called to update the preferences accordingly

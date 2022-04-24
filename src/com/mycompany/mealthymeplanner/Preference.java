@@ -2,7 +2,7 @@ package com.mycompany.mealthymeplanner;
 
 public class Preference {
 
-    double preference;
+    Double preference;
     int rated_count;
     int rating_total;
 
@@ -12,7 +12,7 @@ public class Preference {
         this.rating_total = 0;
     }
 
-    public double getPreference() {
+    public Double getPreference() {
         return this.preference;
     }
 
