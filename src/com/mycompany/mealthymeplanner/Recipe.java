@@ -88,4 +88,14 @@ public class Recipe {
         this.recipeTags = recipeTags;
     }
 
+    public void addIngredient(RecipeIngredient in)
+    {
+        ingredients.add(in);
+    }
+
+    public void addDirection(String direc)
+    {
+        directions.add(direc);
+    }
+
 }

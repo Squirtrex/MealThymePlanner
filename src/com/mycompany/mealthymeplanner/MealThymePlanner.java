@@ -16,6 +16,7 @@ import com.codename1.ui.layouts.GridLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -261,17 +262,46 @@ public class MealThymePlanner {
         tempForm.add(customButton);
         tempForm.add(favoriteButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
-        myRecipesButton.addActionListener((e) -> myRecipesForm.show());
+        myRecipesButton.addActionListener((e) ->
+        {
+            setMyRecipesForm();
+            myRecipesForm.show();
+        });
         customButton.addActionListener((e) -> addCustomRecipeForm.show());
-        favoriteButton.addActionListener((e) -> favoriteRecipesForm.show());
+        favoriteButton.addActionListener((e) ->
+        {
+            setFavoriteRecipesForm();
+            favoriteRecipesForm.show();
+        });
 
         savedRecipesForm = tempForm;
     }
 
     public void setMyRecipesForm() {
         Form tempForm = new Form("My Recipes", BoxLayout.y());
+        ArrayList<Button> recipeButtons = new ArrayList<>();
+
+        for(String rec: currentUser.getCustomRecipes().keySet())
+        {
+            Button tempButton = new Button(rec);
+            tempButton.addActionListener((e) ->
+                    {
+                        setRecipeForm(currentUser.getCustomRecipes().get(rec));
+                        setPreviousForm(myRecipesForm);
+                        recipeForm.show();
+                    });
+            recipeButtons.add(tempButton);
+        }
+
+        Label blankLabel = new Label(" ");
         Button homeButton = new Button("Home");
         Button backButton = new Button("Back");
+
+        for(Button but: recipeButtons)
+        {
+            tempForm.add(but);
+        }
+        tempForm.add(blankLabel);
         tempForm.add(homeButton);
         tempForm.add(backButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
@@ -293,15 +323,6 @@ public class MealThymePlanner {
         TextField caloriesField = new TextField("", "Calories", 5, TextArea.NUMERIC);
         Label cookTimeLabel = new Label("Cook Time (min): " );
         TextField cookTimeField = new TextField("", "Cook Time", 5, TextArea.NUMERIC);
-        Label ingrLabel = new Label("Ingredients: ");
-
-        Container ingredContainer = new Container(BoxLayout.y());
-        ArrayList<TextField> ingrFields = new ArrayList<>();
-        AtomicReference<TextField> ingrFieldTemp = new AtomicReference<>(new TextField("", "Ingredient", 40, TextArea.ANY));
-
-
-        ingredContainer.add(ingrFieldTemp.get());
-
 
         /*
         // Used to split up ingredients into their respective parts, implement later
@@ -311,9 +332,19 @@ public class MealThymePlanner {
         Container IngredContainer = BoxLayout.encloseX(ingrAmountField, ingrAmountTypeField, ingrNameField);
         */
 
-
+        Label ingrLabel = new Label("Ingredients: ");
+        Container ingredContainer = new Container(BoxLayout.y());
+        TextField ingrFieldTemp = new TextField("", "Ingredient", 40, TextArea.ANY);
+        ingredContainer.add(ingrFieldTemp);
         Button addIngredientButton = new Button("+ Ingredient");
-        Button addButton = new Button("Add");
+
+        Label direcLabel = new Label("Directions: ");
+        Container direcContainer = new Container(BoxLayout.y());
+        TextField direcFieldTemp = new TextField("", "Direction", 40, TextArea.ANY);
+        direcContainer.add(direcFieldTemp);
+        Button addDirectionButton = new Button("+ Step");
+
+        Button addButton = new Button("Add Recipe");
         Button cancelButton = new Button("Cancel");
 
         tempForm.add(instructLabel);
@@ -325,23 +356,55 @@ public class MealThymePlanner {
         tempForm.add(caloriesField);
         tempForm.add(cookTimeLabel);
         tempForm.add(cookTimeField);
+
         tempForm.add(ingrLabel);
         tempForm.add(ingredContainer);
         tempForm.add(addIngredientButton);
+
+        tempForm.add(direcLabel);
+        tempForm.add(direcContainer);
+        tempForm.add(addDirectionButton);
 
         tempForm.add(addButton);
         tempForm.add(cancelButton);
 
         addIngredientButton.addActionListener((e)  ->
         {
-            ingrFieldTemp.set(new TextField("", "Ingredient", 40, TextArea.ANY));
-            ingredContainer.add(ingrFieldTemp.get());
+            ingredContainer.add(new TextField("", "Ingredient", 40, TextArea.ANY));
             setAddCustomRecipeForm();
         });
+
+        addDirectionButton.addActionListener((e)  ->
+        {
+            direcContainer.add(new TextField("", "Direction", 40, TextArea.ANY));
+            setAddCustomRecipeForm();
+        });
+
 
         addButton.addActionListener((e) ->
         {
             newRecipe.setName(nameField.getText());
+            newRecipe.setServings(servingsField.getText());
+            newRecipe.setCalories(Double.parseDouble(caloriesField.getText()));
+            newRecipe.setCookTimeMinutes(Float.parseFloat(cookTimeField.getText()));
+
+            List<Component> ingredList = ingredContainer.getChildrenAsList(true);
+            for(Component a: ingredList)
+            {
+                TextField ingrField = (TextField) a;
+                if(ingrField.getText() != null) {
+                    newRecipe.addIngredient(new RecipeIngredient(0, null, new Ingredient(ingrField.getText())));
+                }
+            }
+
+            List<Component> direcList = direcContainer.getChildrenAsList(true);
+            for(Component a: direcList)
+            {
+                TextField direcField = (TextField) a;
+                if(direcField.getText() != null) {
+                    newRecipe.addDirection(direcField.getText());
+                }
+            }
 
             currentUser.addCustomRecipe(newRecipe);
             mainMenuForm.show();
