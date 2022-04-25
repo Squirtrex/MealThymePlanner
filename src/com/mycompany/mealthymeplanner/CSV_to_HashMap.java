@@ -11,7 +11,6 @@ import com.codename1.io.*;
 import com.codename1.ui.*;
 import com.codename1.util.regex.*;
 import java.io.*;
-import java.sql.Array;
 import java.util.*;
 
 /**
@@ -22,11 +21,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
     /**
      * Storage structures used.
      */
-
-    ArrayList<ArrayList<RecipeIngredient>> ingredients = new ArrayList<ArrayList<RecipeIngredient>>();
-    ArrayList<ArrayList<IngredientTag>> ingredientTags = new ArrayList<ArrayList<IngredientTag>>();
-    ArrayList<ArrayList<RecipeTag>> recipeTags = new ArrayList<ArrayList<RecipeTag>>();
-    ArrayList<ArrayList<String>> steps = new ArrayList<ArrayList<String>>();
 
     ArrayList<RecipeIngredient> I;
     ArrayList<IngredientTag> it;
@@ -42,8 +36,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      */
     public CSV_to_HashMap() throws IOException {
 
-        this.rt = new ArrayList<RecipeTag>();
-
         String placeholder = "";
         String name = "";
         String servingSize = "";
@@ -56,15 +48,17 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         try {
             for (String file : files) {
                 InputStream is = Display.getInstance().getResourceAsStream(this.getClass(), file);
-                if(file.contains("American")){ rt.add(RecipeTag.American); }
-                else if(file.contains("Italian")){rt.add(RecipeTag.Italian); }
-                else if(file.contains("Mexican")){rt.add(RecipeTag.Mexican); }
-                else if(file.contains("MiddleEastern")){ rt.add(RecipeTag.Middle_Eastern); }
-                else if(file.contains("Asian")){ rt.add(RecipeTag.Asian); }
-                else if(file.contains("African")){ rt.add(RecipeTag.African); }
                 CSVParser parser = new CSVParser();
                 String[][] data = parser.parse(is);
                 for (int i = 1; i < data.length; i++) {
+                    this.rt = new ArrayList<RecipeTag>();
+                    this.list_of_ingredients = new ArrayList<String>();
+                    if(file.contains("American")){ rt.add(RecipeTag.American); }
+                    else if(file.contains("Italian")){rt.add(RecipeTag.Italian); }
+                    else if(file.contains("Mexican")){rt.add(RecipeTag.Mexican); }
+                    else if(file.contains("MiddleEastern")){ rt.add(RecipeTag.Middle_Eastern); }
+                    else if(file.contains("Asian")){ rt.add(RecipeTag.Asian); }
+                    else if(file.contains("African")){ rt.add(RecipeTag.African); }
                     for (int j = 0; j < data[i].length; j++) {
                         switch (j) {
                             case 0: name = data[i][j]; break;
@@ -75,9 +69,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
                             case 5: imgpath = data[i][j]; break;
                             case 6: placeholder = data[i][j]; calories = parseCalories(placeholder); break;
                         }
-                        recipeTags.add(rt);
-                        ingredients.add(I);
-                        steps.add(s);
                         Recipe recipe = new Recipe(name, I, s, servingSize, calories, cookTime, rt);
                         recipes.put(name, recipe);
                     }
@@ -103,7 +94,13 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         System.out.println("EastAfrican recipes: "+recipes.containsKey("Roasted Okra"));
         Recipe r = recipes.get("Roasted Okra");
         System.out.println("Name: "+r.getName());
-        System.out.println("Ingredients: "+r.getIngredients());
+        for(String s : list_of_ingredients){
+            System.out.println(s);
+        }
+        for(RecipeIngredient ri : r.getIngredients()) {
+            System.out.println("Ingredients: " + ri);
+        }
+        System.out.println(r.getRecipeTags());
     }
 
     /**
@@ -111,15 +108,12 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      * @param text
      */
     private void parseIngredients(String text){
-        String ingredient = "";
-        int index = 0;
-        RE re = new RE("'([^']*)'");
-        while(re.match(text, index)){
-            for(int i=0;i<re.getParenCount();i++){
-                ingredient = re.getParen(i);
-                if(!ingredient.contains(",") && !ingredient.contains("'")){tagIngredients(ingredient); }
+        String[] arr = text.split("\'");
+        for(String s : arr){
+            if(!s.equals(", ") && !s.contains("]") && !s.contains("[")){
+                list_of_ingredients.add(s);
+                tagIngredients(s);
             }
-            index = re.getParenEnd(re.getParenCount()-1);
         }
     }
 
@@ -129,15 +123,12 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      */
     private void parseSteps(String text){
         this.s = new ArrayList<String>();
-        String step = "";
-        int index = 0;
-        RE re = new RE("'([^']*)'");
-        while(re.match(text,index)){
-            for(int i=0;i<re.getParenCount();i++){
-                step = re.getParen(i);
-                if(!step.contains("'") && step.length()!=2){ s.add(step);}
+        String[] arr = text.split("\'");
+        for(String str : arr){
+            if(!str.equals(", ") && !str.contains("]") && !str.contains("[") && str.length()>2){
+                str=str.substring(0,str.length()-2);
+                s.add(str);
             }
-            index = re.getParenEnd(re.getParenCount()-1);
         }
     }
 
