@@ -103,8 +103,13 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      * @param text the string to be parsed
      */
     private void parseIngredients(String text){
-        String[] arr = text.split("'");
-        for(String s : arr){
+        ArrayList<String> splitArr = new ArrayList<>();
+        StringTokenizer arr = new StringTokenizer(text,"'");
+        while(arr.hasMoreTokens()){
+            splitArr.add(arr.nextToken());
+        }
+        String[] array = splitArr.toArray(new String[splitArr.size()]);
+        for(String s : array){
             s=s.replace("]","");
             s=s.replace("[","");
             s=s.replace("\"","");
@@ -121,10 +126,15 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      */
     private void parseSteps(String text){
         this.s = new ArrayList<>();
-        String[] arr = text.split("'");
+        ArrayList<String> splitArr = new ArrayList<>();
+        StringTokenizer arr = new StringTokenizer(text,"'");
+        while(arr.hasMoreTokens()){
+            splitArr.add(arr.nextToken());
+        }
+        String[] array = splitArr.toArray(new String[splitArr.size()]);
         int i = 0;
         String prevStr = "";
-        for(String str : arr){
+        for(String str : array){
             if(str.length()>2){
                 str=str.replaceAll("\\\\r\\\\n|\\\\r|\\\\n","");
                 str=str.replace("]","");
@@ -150,12 +160,19 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      * @return cal is the double that contains the amount of calories
     */
     private double parseCalories(String text){
-        String[] arr = text.split(" ");
-        if(arr.length<2){return 0;}
-        String str = arr[1];
-        str = str.trim();
-        str = str.substring(1);
-        return Double.parseDouble(str);
+        ArrayList<String> splitArr = new ArrayList<>();
+        StringTokenizer arr = new StringTokenizer(text," ");
+        while(arr.hasMoreTokens()){
+            splitArr.add(arr.nextToken());
+        }
+        String[] array = splitArr.toArray(new String[splitArr.size()]);
+         if (array.length < 2) {
+            return 0;
+         }
+         String str = array[1];
+         str = str.trim();
+         str = str.substring(1);
+         return Double.parseDouble(str);
     }
 
 
