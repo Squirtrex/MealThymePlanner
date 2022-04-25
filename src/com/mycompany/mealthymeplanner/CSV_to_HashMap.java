@@ -134,30 +134,12 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      * @return
      */
     private double parseCalories(String text){
-        double cal = 0;
-        String nut = "";
-        String[] c = new String[2];
-        int count = 0;
-        int index = 0;
-        RE re = new RE("'([^']*)'");
-        RE re2 = new RE("[:space:]");
-        while(re.match(text, index)){
-            for(int i=0;i<re.getParenCount();i++) {
-                nut = re.getParen(i);
-                if (nut.contains("calorie")) {
-                    count++;
-                }
-                if (count == 2 && nut.contains("calorie")) {
-                    count = 0;
-                    if(re2.match(nut)){
-                        c = re2.split(nut);
-                        if(c[0]!=null && !c[0].equals("0.0")){cal = Double.parseDouble(c[0]);return cal;}
-                    }
-                }
-            }
-            index = re.getParenEnd(re.getParenCount()-1);
-        }
-        return cal;
+        String[] arr = text.split(" ");
+        if(arr.length<2){return 0;}
+        String str = arr[1];
+        str = str.trim();
+        str = str.substring(1);
+        return Double.parseDouble(str);
     }
 
     /**
