@@ -128,6 +128,18 @@ public class MealThymePlanner {
             directionsLabels.add(new SpanLabel(direc));
         }
 
+        String removeText = "Remove from Favorites";
+        String addText = "Add to Favorites";
+        String favButtText;
+        if(currentUser.getFavoriteRecipes().get(recipe.getName()) != null)
+        {
+            favButtText = removeText;
+        }
+        else {
+            favButtText = addText;
+        }
+
+        Button favoriteButton = new Button(favButtText);
         Button backButton = new Button("Back");
         Button homeButton = new Button("Home");
         
@@ -142,10 +154,33 @@ public class MealThymePlanner {
         tempForm.add(dirLabel);
         for (SpanLabel lab : directionsLabels) {
             tempForm.add(lab);
-        }        
+        }
+        tempForm.add(favoriteButton);
         tempForm.add(backButton);
         tempForm.add(homeButton);
-        backButton.addActionListener((e) -> showPreviousForm());
+
+        favoriteButton.addActionListener((e) -> {
+            if(favButtText.equals(addText)) {
+                currentUser.addFavoriteRecipe(recipe);
+                favoriteButton.setText(removeText);
+                setRecipeForm(recipe);
+            }
+            else {
+                    currentUser.removeFavoriteRecipe(recipe);
+                    favoriteButton.setText(addText);
+                    setRecipeForm(recipe);
+            }
+        });
+
+        backButton.addActionListener((e) ->
+        {
+            if(previousForm.equals(favoriteRecipesForm))
+            {
+                setFavoriteRecipesForm();
+            }
+            showPreviousForm();
+        });
+
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
         recipeForm = tempForm;
@@ -188,11 +223,15 @@ public class MealThymePlanner {
     public void setRecommendedForm() {
         Form tempForm = new Form("Recommended For You", new GridLayout(8, 1));
         Recipe databaseRecipe = hashmap.get("Gravel Salad");
-      //  System.out.println(databaseRecipe.getIngredients());
-     //   Recipe recRecipe1 = testRecipe1;
-/*        Recipe recRecipe1 = databaseRecipe;
+
+        /*
+        // Testing Recipes
+        System.out.println(databaseRecipe.getIngredients());
+        Recipe recRecipe1 = testRecipe1;
+        Recipe recRecipe1 = databaseRecipe;
         Recipe recRecipe2 = testRecipe2;
-        Recipe recRecipe3 = testRecipe3;*/
+        Recipe recRecipe3 = testRecipe3;
+        */
 
         Recipe[] topThree = PriorityMachine.simpleRecThree(currentUser, 300, hashmap);
         Recipe recRecipe1 = topThree[0];
@@ -259,15 +298,20 @@ public class MealThymePlanner {
     }
 
     public void setSavedRecipesForm() {
-        Form tempForm = new Form("Saved Recipes", BoxLayout.y());
-        Button homeButton = new Button("Home");
+        Form tempForm = new Form("Saved Recipes", new GridLayout(8, 1));
+
         Button myRecipesButton = new Button("My Recipes");
-        Button customButton = new Button("Add Custom Recipe");
         Button favoriteButton = new Button("Favorite Recipes");
-        tempForm.add(homeButton);
+        Button customButton = new Button("Add Custom Recipe");
+        Label blankLabel = new Label(" ");
+        Button homeButton = new Button("Home");
+
         tempForm.add(myRecipesButton);
-        tempForm.add(customButton);
         tempForm.add(favoriteButton);
+        tempForm.add(customButton);
+        tempForm.add(blankLabel);
+        tempForm.add(homeButton);
+
         homeButton.addActionListener((e) -> mainMenuForm.show());
         myRecipesButton.addActionListener((e) ->
         {
@@ -423,8 +467,29 @@ public class MealThymePlanner {
 
     public void setFavoriteRecipesForm() {
         Form tempForm = new Form("Favorite Recipes", BoxLayout.y());
+        ArrayList<Button> recipeButtons = new ArrayList<>();
+
+        for(String rec: currentUser.getFavoriteRecipes().keySet())
+        {
+            Button tempButton = new Button(rec);
+            tempButton.addActionListener((e) ->
+            {
+                setRecipeForm(currentUser.getFavoriteRecipes().get(rec));
+                setPreviousForm(favoriteRecipesForm);
+                recipeForm.show();
+            });
+            recipeButtons.add(tempButton);
+        }
+
+        Label blankLabel = new Label(" ");
         Button homeButton = new Button("Home");
         Button backButton = new Button("Back");
+
+        for(Button but: recipeButtons)
+        {
+            tempForm.add(but);
+        }
+        tempForm.add(blankLabel);
         tempForm.add(homeButton);
         tempForm.add(backButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
