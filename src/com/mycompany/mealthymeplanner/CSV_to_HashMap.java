@@ -1,7 +1,6 @@
 /**
  * @author Nicholas Pepin
  */
-
 package com.mycompany.mealthymeplanner;
 
 /**
@@ -9,7 +8,6 @@ package com.mycompany.mealthymeplanner;
  */
 import com.codename1.io.*;
 import com.codename1.ui.*;
-import com.codename1.util.regex.*;
 import java.io.*;
 import java.util.*;
 
@@ -21,7 +19,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
     /**
      * Storage structures used.
      */
-
     ArrayList<RecipeIngredient> I;
     ArrayList<IngredientTag> it;
     ArrayList<RecipeTag> rt;
@@ -32,7 +29,7 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
     /**
      * This is the constructor that loads all the csv files into string arrays.
      * IMPORTANT: THE .CSV FILES MUST BE IN THE /src DIRECTORY, NOT THE /src/Tester DIRECTORY.
-     * @throws IOException
+     * @throws IOException If the file cannot be opened, this is thrown
      */
     public CSV_to_HashMap() throws IOException {
 
@@ -69,9 +66,9 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
                             case 5: imgpath = data[i][j]; break;
                             case 6: placeholder = data[i][j]; calories = parseCalories(placeholder); break;
                         }
-                        Recipe recipe = new Recipe(name, I, s, servingSize, calories, cookTime, rt);
-                        recipes.put(name, recipe);
                     }
+                    Recipe recipe = new Recipe(name, I, s, servingSize, calories, cookTime, rt);
+                    recipes.put(name, recipe);
                 }
             }
         }catch(IOException err) {
@@ -83,7 +80,7 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
 
     /**
      * This gives the hashmap to other files.
-     * @return
+     * @return recipes the hashmap of recipe objects
      */
     HashMap<String, Recipe> getHashMap(){ return recipes; }
 
@@ -95,17 +92,18 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         Recipe r = recipes.get("Roasted Okra");
         System.out.println("Name: "+r.getName());
         for(RecipeIngredient ri : r.getIngredients()) {
-            System.out.println("Ingredients: " + ri);
+            Ingredient ing = ri.getIngredient();
+            System.out.println("Ingredients: " + ing.getName());
         }
         System.out.println(r.getRecipeTags());
     }
 
     /**
-     * This method parses out the ingredients and sends them to tagIngredients() to be sited through, categorized, and then put into an ArrayList.
-     * @param text
+     * This takes the ingredient as a string and it parses out the unnecessary stuff.
+     * @param text the string to be parsed
      */
     private void parseIngredients(String text){
-        String[] arr = text.split("\'");
+        String[] arr = text.split("'");
         for(String s : arr){
             if(!s.equals(", ") && !s.contains("]") && !s.contains("[")){
                 tagIngredients(s);
@@ -115,13 +113,13 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
 
     /**
      * This method parses the steps and puts them into the steps ArrayList.
-     * @param text
+     * @param text the string to be parsed
      */
     private void parseSteps(String text){
-        this.s = new ArrayList<String>();
-        String[] arr = text.split("\'");
+        this.s = new ArrayList<>();
+        String[] arr = text.split("'");
         for(String str : arr){
-            if(!str.equals(", ") && !str.contains("]") && !str.contains("[") && str.length()>2){
+            if(str.length()>2 && !str.contains("]") && !str.contains("[")){
                 str=str.substring(0,str.length()-2);
                 s.add(str);
             }
@@ -130,9 +128,9 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
 
     /**
      * This method pulls the double value associated with the calorie value of the recipe.
-     * @param text
-     * @return
-     */
+     * @param text the string to be parsed
+     * @return cal is the double that contains the amount of calories
+    */
     private double parseCalories(String text){
         String[] arr = text.split(" ");
         if(arr.length<2){return 0;}
@@ -142,74 +140,85 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         return Double.parseDouble(str);
     }
 
+
     /**
      * This takes the strings and finds tags to be assigned to the ingredient and recipe, then places the ingredient into an ArrayList.
-     * @param str
+     * @param text is the string to be parsed
      */
-    private void tagIngredients(String str){
-
-        this.it = new ArrayList<IngredientTag>();
-
-        double amount=0;
+    private void tagIngredients(String text){
+        this.it = new ArrayList<>();
+        String[] arr = text.split(" ");
+        String str = "";
         String amountType = "";
-
-        //This gets the numerical amount for the ingredients
-        char[] chars = str.toCharArray();
-        for(char c : chars) {
-            if(Character.isDigit(c)) {
-                amount += Double.parseDouble(String.valueOf(c));
-                if(str.contains("⅓")) {
-                    amount += (double) 1/3;
-                }if(str.contains("½")) {
-                    amount += (double) 1/2;
+        double dub = 0;
+        for (String value : arr) {
+            try {
+                if (value.contains("⅓")) {
+                    dub += (double) 1 / 3;
+                }if (value.contains("½")) {
+                    dub += (double) 1 / 2;
+                }if (value.contains("¼")) {
+                    dub += (double) 1 / 4;
+                }if (value.contains("⅛")) {
+                    dub += (double) 1 / 8;
+                }if (value.contains("¾")) {
+                    dub += (double) 3 / 4;
+                }if (value.contains("⅔")) {
+                    dub += (double) 2 / 3;
                 }
+                dub += Double.parseDouble(value);
+            } catch (NumberFormatException nfe) {
+                str = str.concat(value + " ");
             }
         }
+        str = str.trim();
 
         //This checks for tags of style of measurement
-        if(str.contains("cup") || str.contains("cups")){
+        if(str.contains("cup") || str.contains("Cup")){
             amountType = "cups";
-        }else if(str.contains("teaspoon") || str.contains("teaspoons")) {
+        }else if(str.contains("ounce") || str.contains("Ounce")) {
+            amountType = "ounces";
+        }else if(str.contains("teaspoon") || str.contains("Teaspoon")) {
             amountType = "teaspoon";
-        }else if(str.contains("tablespoon") || str.contains("tablespoons")){
+        }else if(str.contains("tablespoon") || str.contains("Tablespoon")){
             amountType = "tablespoons";
-        }else if(str.contains("pounds") || str.contains("pound")) {
+        }else if(str.contains("pound") || str.contains("Pound")) {
             amountType = "pounds";
-        }else if(str.contains("pint") || str.contains("pints")) {
+        }else if(str.contains("pint") || str.contains("Pint")) {
             amountType = "pints";
-        }else if(str.contains("quart") || str.contains("quarts")) {
+        }else if(str.contains("quart") || str.contains("Quart")) {
             amountType = "quarts";
-        }else if(str.contains("gallon") || str.contains("gallons")) {
+        }else if(str.contains("gallon") || str.contains("Gallon")) {
             amountType = "gallons";
         }
 
         //This gives tags for what kind of food it is.
-        if(str.contains("chicken") || str.contains("Chicken")) {
+        if(text.contains("chicken") || text.contains("Chicken")) {
             if(!it.contains(IngredientTag.Chicken)){it.add(IngredientTag.Chicken);}
             if(!rt.contains(RecipeTag.Chicken)){rt.add(RecipeTag.Chicken);}
-        }else if(str.contains("beef") || str.contains("Beef")) {
+        }else if(text.contains("beef") || text.contains("Beef")) {
             if(!it.contains(IngredientTag.Beef)){it.add(IngredientTag.Beef);}
             if(!rt.contains(RecipeTag.Beef)){rt.add(RecipeTag.Beef);}
-        }else if(str.contains("pork") || str.contains("Pork") || str.contains("bacon") || str.contains("Bacon")) {
+        }else if(text.contains("pork") || text.contains("Pork") || text.contains("bacon") || text.contains("Bacon")) {
             if(!it.contains(IngredientTag.Pork)){it.add(IngredientTag.Pork);}
             if(!rt.contains(RecipeTag.Pork)){rt.add(RecipeTag.Pork);}
-        }else if(str.contains("flour") || str.contains("Flour")) {
+        }else if(text.contains("flour") || text.contains("Flour")) {
             if(!it.contains(IngredientTag.Gluten)){it.add(IngredientTag.Gluten);}
             if(!rt.contains(RecipeTag.Gluten)){rt.add(RecipeTag.Gluten);}
-        }else if(str.contains("crab") || str.contains("Crab") || str.contains("shrimp") || str.contains("Shrimp") || str.contains("lobster") || str.contains("Lobster")
-                || str.contains("clam") || str.contains("Clam") || str.contains("Oyster") || str.contains("oyster") || str.contains("mussel") || str.contains("Mussel")
-                || str.contains("Crayfish") || str.contains("crayfish")) {
+        }else if(text.contains("crab") || text.contains("Crab") || text.contains("shrimp") || text.contains("Shrimp") || text.contains("lobster") || text.contains("Lobster")
+                || text.contains("clam") || text.contains("Clam") || text.contains("Oyster") || text.contains("oyster") || text.contains("mussel") || text.contains("Mussel")
+                || text.contains("Crayfish") || text.contains("crayfish")) {
             if(!it.contains(IngredientTag.Shellfish)){it.add(IngredientTag.Shellfish);}
             if(!rt.contains(RecipeTag.Shellfish)){rt.add(RecipeTag.Shellfish);}
-        }else if(str.contains("salmon") || str.contains("Salmon") || str.contains("tuna") || str.contains("Tuna") || str.contains("Trout") || str.contains("trout")
-                || str.contains("halibut") || str.contains("Halibut") || str.contains("Cod") || str.contains("cod") || str.contains("Sardines") || str.contains("sardines")
-                || str.contains("Anchovie") || str.contains("anchovie")) {
+        }else if(text.contains("salmon") || text.contains("Salmon") || text.contains("tuna") || text.contains("Tuna") || text.contains("Trout") || text.contains("trout")
+                || text.contains("halibut") || text.contains("Halibut") || text.contains("Cod") || text.contains("cod") || text.contains("Sardines") || text.contains("sardines")
+                || text.contains("Anchovie") || text.contains("anchovie")) {
             if(!it.contains(IngredientTag.Fish)){it.add(IngredientTag.Fish);}
             if(!rt.contains(RecipeTag.Fish)){rt.add(RecipeTag.Fish);}
-        }else if(str.contains("milk") || str.contains("Milk") || str.contains("cream") || str.contains("Cream") || str.contains("cheese") || str.contains("Cheese")){
+        }else if(text.contains("milk") || text.contains("Milk") || text.contains("cream") || text.contains("Cream") || text.contains("cheese") || text.contains("Cheese")){
             if(!it.contains(IngredientTag.Dairy)){it.add(IngredientTag.Dairy);}
             if(!rt.contains(RecipeTag.Dairy)){rt.add(RecipeTag.Dairy);}
-        }else if(str.contains("egg") || str.contains("Egg")){
+        }else if(text.contains("egg") || text.contains("Egg")){
             if(!it.contains(IngredientTag.Eggs)){it.add(IngredientTag.Eggs);}
             if(!rt.contains(RecipeTag.Eggs)){rt.add(RecipeTag.Eggs);}
         }
@@ -231,8 +240,8 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         }
 
         //Puts all of these factors into a RecipeIngredient object then into the ArrayList
-        Ingredient ing = new Ingredient(str,it);
-        RecipeIngredient ingredient = new RecipeIngredient(amount, amountType, ing);
+        Ingredient ing = new Ingredient(text,it);
+        RecipeIngredient ingredient = new RecipeIngredient(dub, amountType, ing);
         I.add(ingredient);
     }
 }
