@@ -52,7 +52,7 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
                 String[][] data = parser.parse(is);
                 for (int i = 1; i < data.length; i++) {
                     this.rt = new ArrayList<RecipeTag>();
-                    this.list_of_ingredients = new ArrayList<String>();
+                    this.I = new ArrayList<RecipeIngredient>();
                     if(file.contains("American")){ rt.add(RecipeTag.American); }
                     else if(file.contains("Italian")){rt.add(RecipeTag.Italian); }
                     else if(file.contains("Mexican")){rt.add(RecipeTag.Mexican); }
@@ -94,9 +94,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         System.out.println("EastAfrican recipes: "+recipes.containsKey("Roasted Okra"));
         Recipe r = recipes.get("Roasted Okra");
         System.out.println("Name: "+r.getName());
-        for(String s : list_of_ingredients){
-            System.out.println(s);
-        }
         for(RecipeIngredient ri : r.getIngredients()) {
             System.out.println("Ingredients: " + ri);
         }
@@ -111,7 +108,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
         String[] arr = text.split("\'");
         for(String s : arr){
             if(!s.equals(", ") && !s.contains("]") && !s.contains("[")){
-                list_of_ingredients.add(s);
                 tagIngredients(s);
             }
         }
@@ -171,7 +167,6 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
     private void tagIngredients(String str){
 
         this.it = new ArrayList<IngredientTag>();
-        this.I = new ArrayList<RecipeIngredient>();
 
         double amount=0;
         String amountType = "";
