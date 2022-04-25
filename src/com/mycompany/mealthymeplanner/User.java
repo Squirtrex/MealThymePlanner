@@ -19,8 +19,9 @@ public class User {
     private HashMap<String, Preference> ingredientPrefs;
     private HashMap<RecipeTag, Preference> attributePrefs;
     private boolean newUser;
-    private  HashMap<String, Recipe> customRecipes;
-    private  HashMap<String, Recipe> favoriteRecipes;
+    private HashMap<String, Recipe> customRecipes;
+    private HashMap<String, Recipe> favoriteRecipes;
+    private ArrayList<Recipe> futureRecipes;
 
     public User() {
         this.likedCuisines = new ArrayList<>();
@@ -35,9 +36,13 @@ public class User {
         this.newUser = true;
         this.customRecipes = new HashMap<>();
         this.favoriteRecipes = new HashMap<>();
+        this.futureRecipes = new ArrayList<>();
     }
 
-    public User(ArrayList<String> likedCuisines, ArrayList<String> restrictedIngredients, ArrayList<IngredientTag> preferences, HashMap<Recipe, Double> algorithmScore, HashMap<String, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade, ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs, boolean newUser, HashMap<String, Recipe> customRecipes, HashMap<String, Recipe> favoriteRecipes) {
+    public User(ArrayList<String> likedCuisines, ArrayList<String> restrictedIngredients, ArrayList<IngredientTag> preferences,
+                HashMap<Recipe, Double> algorithmScore, HashMap<String, Integer> userRatings, HashMap<Recipe, Integer> timeSinceLastMade,
+                ArrayList<Recipe> prioritizedRecipes, HashMap<String, Preference> ingredientPrefs, HashMap<RecipeTag, Preference> attributePrefs,
+                boolean newUser, HashMap<String, Recipe> customRecipes, HashMap<String, Recipe> favoriteRecipes, ArrayList<Recipe> futureRecipes) {
         this.likedCuisines = likedCuisines;
         this.restrictedIngredients = restrictedIngredients;
         this.preferences = preferences;
@@ -50,6 +55,7 @@ public class User {
         this.newUser = newUser;
         this.customRecipes = customRecipes;
         this.favoriteRecipes = favoriteRecipes;
+        this.futureRecipes =  futureRecipes;
     }
 
     public ArrayList<IngredientTag> getPreferences() {
@@ -148,6 +154,14 @@ public class User {
         this.favoriteRecipes = favoriteRecipes;
     }
 
+    public ArrayList<Recipe> getFutureRecipes() {
+        return futureRecipes;
+    }
+
+    public void setFutureRecipes(ArrayList<Recipe> futureRecipes) {
+        this.futureRecipes = futureRecipes;
+    }
+
     // method to add one cuisine to the liked cuisine list if it is not already in the list
     public void addLikedCuisine(String cuisine) {
         if (likedCuisines.contains(cuisine) == false) {
@@ -180,6 +194,19 @@ public class User {
     {
         if(favoriteRecipes.get(rec.getName()) != null) {
             favoriteRecipes.remove(rec.getName());
+        }
+    }
+
+    public void addFutureRecipe(Recipe rec)
+    {
+        futureRecipes.add(rec);
+    }
+
+    public void removeFutureRecipe(Recipe rec)
+    {
+        if(futureRecipes.contains(rec))
+        {
+            futureRecipes.remove(rec);
         }
     }
 
