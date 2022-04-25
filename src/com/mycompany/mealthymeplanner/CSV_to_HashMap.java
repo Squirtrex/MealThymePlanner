@@ -208,50 +208,48 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
 
         //This gives tags for what kind of food it is.
         if(str.contains("chicken") || str.contains("Chicken")) {
-            it.add(IngredientTag.Chicken);
-            rt.add(RecipeTag.Chicken);
+            if(!it.contains(IngredientTag.Chicken)){it.add(IngredientTag.Chicken);}
+            if(!rt.contains(RecipeTag.Chicken)){rt.add(RecipeTag.Chicken);}
         }else if(str.contains("beef") || str.contains("Beef")) {
-            it.add(IngredientTag.Beef);
-            rt.add(RecipeTag.Beef);
+            if(!it.contains(IngredientTag.Beef)){it.add(IngredientTag.Beef);}
+            if(!rt.contains(RecipeTag.Beef)){rt.add(RecipeTag.Beef);}
         }else if(str.contains("pork") || str.contains("Pork") || str.contains("bacon") || str.contains("Bacon")) {
-            it.add(IngredientTag.Pork);
-            rt.add(RecipeTag.Pork);
+            if(!it.contains(IngredientTag.Pork)){it.add(IngredientTag.Pork);}
+            if(!rt.contains(RecipeTag.Pork)){rt.add(RecipeTag.Pork);}
         }else if(str.contains("flour") || str.contains("Flour")) {
-            it.add(IngredientTag.Gluten);
-            rt.add(RecipeTag.Gluten);
+            if(!it.contains(IngredientTag.Gluten)){it.add(IngredientTag.Gluten);}
+            if(!rt.contains(RecipeTag.Gluten)){rt.add(RecipeTag.Gluten);}
         }else if(str.contains("crab") || str.contains("Crab") || str.contains("shrimp") || str.contains("Shrimp") || str.contains("lobster") || str.contains("Lobster")
                 || str.contains("clam") || str.contains("Clam") || str.contains("Oyster") || str.contains("oyster") || str.contains("mussel") || str.contains("Mussel")
                 || str.contains("Crayfish") || str.contains("crayfish")) {
-            it.add(IngredientTag.Shellfish);
-            rt.add(RecipeTag.Shellfish);
+            if(!it.contains(IngredientTag.Shellfish)){it.add(IngredientTag.Shellfish);}
+            if(!rt.contains(RecipeTag.Shellfish)){rt.add(RecipeTag.Shellfish);}
         }else if(str.contains("salmon") || str.contains("Salmon") || str.contains("tuna") || str.contains("Tuna") || str.contains("Trout") || str.contains("trout")
                 || str.contains("halibut") || str.contains("Halibut") || str.contains("Cod") || str.contains("cod") || str.contains("Sardines") || str.contains("sardines")
                 || str.contains("Anchovie") || str.contains("anchovie")) {
-            it.add(IngredientTag.Fish);
-            rt.add(RecipeTag.Fish);
+            if(!it.contains(IngredientTag.Fish)){it.add(IngredientTag.Fish);}
+            if(!rt.contains(RecipeTag.Fish)){rt.add(RecipeTag.Fish);}
         }else if(str.contains("milk") || str.contains("Milk") || str.contains("cream") || str.contains("Cream") || str.contains("cheese") || str.contains("Cheese")){
-            it.add(IngredientTag.Dairy);
-            rt.add(RecipeTag.Dairy);
+            if(!it.contains(IngredientTag.Dairy)){it.add(IngredientTag.Dairy);}
+            if(!rt.contains(RecipeTag.Dairy)){rt.add(RecipeTag.Dairy);}
         }else if(str.contains("egg") || str.contains("Egg")){
-            it.add(IngredientTag.Eggs);
-            rt.add(RecipeTag.Eggs);
+            if(!it.contains(IngredientTag.Eggs)){it.add(IngredientTag.Eggs);}
+            if(!rt.contains(RecipeTag.Eggs)){rt.add(RecipeTag.Eggs);}
         }
 
         //Dietary restriction tag addition
         if(!it.contains(IngredientTag.Chicken) && !it.contains(IngredientTag.Beef) && !it.contains(IngredientTag.Pork) && !it.contains(IngredientTag.Eggs) && !it.contains(IngredientTag.Dairy)) {
-            it.add(IngredientTag.Vegan);
-            it.add(IngredientTag.Vegetarian);
-        }else if(!it.contains(IngredientTag.Gluten)) {
+            if(!it.contains(IngredientTag.Vegan) && !it.contains(IngredientTag.Vegetarian)){it.add(IngredientTag.Vegan); it.add(IngredientTag.Vegetarian);}
+        }else if(!it.contains(IngredientTag.Gluten) && !it.contains(IngredientTag.Gluten_Free)) {
             it.add(IngredientTag.Gluten_Free);
-        }else if(!it.contains(IngredientTag.Dairy)){
+        }else if(!it.contains(IngredientTag.Dairy) && !it.contains(IngredientTag.Dairy_Free)){
             it.add(IngredientTag.Dairy_Free);
         }
         if(!rt.contains(RecipeTag.Chicken) && !rt.contains(RecipeTag.Beef) && !rt.contains(RecipeTag.Pork) && !rt.contains(RecipeTag.Eggs) && !rt.contains(RecipeTag.Dairy)) {
-            rt.add(RecipeTag.Vegan);
-            rt.add(RecipeTag.Vegetarian);
-        }else if(!rt.contains(RecipeTag.Gluten)){
+            if(!rt.contains(RecipeTag.Vegan) && !rt.contains(RecipeTag.Vegetarian)){rt.add(RecipeTag.Vegan); rt.add(RecipeTag.Vegetarian);}
+        }else if(!rt.contains(RecipeTag.Gluten) && !rt.contains(RecipeTag.Gluten_Free)){
             rt.add(RecipeTag.Gluten_Free);
-        }else if(!rt.contains(RecipeTag.Dairy)){
+        }else if(!rt.contains(RecipeTag.Dairy) && !rt.contains(RecipeTag.Dairy_Free)){
             rt.add(RecipeTag.Dairy_Free);
         }
 
