@@ -105,7 +105,11 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
     private void parseIngredients(String text){
         String[] arr = text.split("'");
         for(String s : arr){
-            if(!s.equals(", ") && !s.contains("]") && !s.contains("[")){
+            s=s.replace("]","");
+            s=s.replace("[","");
+            s=s.replace("\"","");
+            s=s.replace("'","");
+            if(!s.equals(", ")){
                 tagIngredients(s);
             }
         }
@@ -118,10 +122,24 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
     private void parseSteps(String text){
         this.s = new ArrayList<>();
         String[] arr = text.split("'");
+        int i = 0;
+        String prevStr = "";
         for(String str : arr){
-            if(str.length()>2 && !str.contains("]") && !str.contains("[")){
-                str=str.substring(0,str.length()-2);
+            if(str.length()>2){
+                str=str.replaceAll("\\\\r\\\\n|\\\\r|\\\\n","");
+                str=str.replace("]","");
+                str=str.replace("[","");
+                str=str.replace("\"","");
+                str=str.replace("'","");
+                str = str.trim();
+                if(str.startsWith(", ")){ str = str.substring(2); }
+                prevStr = str;
+                if(!str.startsWith("Step") && i!=0){
+                    str = prevStr.concat(str);
+                    s.set(i-1,str);
+                }
                 s.add(str);
+                i++;
             }
         }
     }
