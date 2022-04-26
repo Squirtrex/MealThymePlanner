@@ -46,6 +46,7 @@ public class MealThymePlanner {
     private Form favoriteRecipesForm;
     private Form profileForm;
     private Form browseForm;
+    private Form browseSubForm;
     private Form recommendedForm;
     private Form searchForm;
     private Form recipeForm;
@@ -95,7 +96,11 @@ public class MealThymePlanner {
 
         recommendedButton.addActionListener((e) -> recommendedForm.show());
         savedRecipesButton.addActionListener((e) -> savedRecipesForm.show());
-        browseButton.addActionListener((e) -> browseForm.show());
+        browseButton.addActionListener((e) ->
+        {
+            setBrowseForm();
+            browseForm.show();
+        });
         searchButton.addActionListener((e) -> searchForm.show());
         futureButton.addActionListener((e) -> futurePlanningForm.show());
         profileButton.addActionListener((e) ->
@@ -279,28 +284,104 @@ public class MealThymePlanner {
     }
     
     public void setBrowseForm() {
-        Form tempForm = new Form("Browse", new GridLayout(8, 1));
+        Form tempForm = new Form("Browse", new GridLayout(cuisineTypes.size() + 2, 1));
 
-        Button cuisineButton1 = new Button("Italian");
-        Button cuisineButton2 = new Button("Mexican");
-        Button cuisineButton3 = new Button("American");
-        Button cuisineButton4 = new Button("Asian");
-        Button cuisineButton5 = new Button("African");
-        Button cuisineButton6 = new Button("Middle Eastern");
-        Label blankLabel = new Label("");
+        ArrayList<Button> cuisineButtons = new ArrayList<>();
+
+        for(String cuisine: cuisineTypes)
+        {
+            Button tempButton = new Button(cuisine);
+            tempButton.addActionListener((e) ->
+            {
+                setBrowseSubForm(cuisine);
+                browseSubForm.show();
+            });
+            cuisineButtons.add(tempButton);
+        }
+
+        Label blankLabel = new Label(" ");
         Button homeButton = new Button("Home");
 
-        tempForm.add(cuisineButton1);
-        tempForm.add(cuisineButton2);
-        tempForm.add(cuisineButton3);
-        tempForm.add(cuisineButton4);
-        tempForm.add(cuisineButton5);
-        tempForm.add(cuisineButton6);
+        for(Button but: cuisineButtons)
+        {
+            tempForm.add(but);
+        }
         tempForm.add(blankLabel);
         tempForm.add(homeButton);
+
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
         browseForm = tempForm;
+    }
+
+    public void setBrowseSubForm(String cuisine) {
+        Form tempForm = new Form("Browse", BoxLayout.y());
+
+        RecipeTag recTag;
+        switch(cuisine)
+        {
+            case "Italian":
+                recTag = RecipeTag.Italian;
+                break;
+            case "Mexican":
+                recTag = RecipeTag.Mexican;
+                break;
+            case "American":
+                recTag = RecipeTag.American;
+                break;
+            case "Asian":
+                recTag = RecipeTag.Asian;
+                break;
+            case "African":
+                recTag = RecipeTag.African;
+                break;
+            case "Middle Eastern":
+                recTag = RecipeTag.Middle_Eastern;
+                break;
+            default:
+                recTag = RecipeTag.American;
+                break;
+        }
+
+        ArrayList<String> sortedRecipes = new ArrayList<>();
+        ArrayList<Button> recipeButtons = new ArrayList<>();
+        for(String recKey: hashmap.keySet())
+        {
+            if(hashmap.get(recKey).getRecipeTags().contains(recTag))
+            {
+                sortedRecipes.add(recKey);
+            }
+        }
+
+        for(String rec: sortedRecipes)
+        {
+            Button tempButton = new Button(rec);
+            tempButton.addActionListener((e) ->
+            {
+                setRecipeForm(hashmap.get(rec));
+                setPreviousForm(browseSubForm );
+                recipeForm.show();
+            });
+            recipeButtons.add(tempButton);
+        }
+
+        Button homeButton = new Button("Home");
+        Button backButton = new Button("Back");
+        Label blankLabel = new Label(" ");
+
+        tempForm.add(homeButton);
+        tempForm.add(backButton);
+        tempForm.add(blankLabel);
+
+        for(Button but: recipeButtons)
+        {
+            tempForm.add(but);
+        }
+
+        homeButton.addActionListener((e) -> mainMenuForm.show());
+        backButton.addActionListener((e) -> browseForm.show());
+
+        browseSubForm = tempForm;
     }
     
     public void setRecommendedForm() {
@@ -373,8 +454,33 @@ public class MealThymePlanner {
     
     public void setSearchForm() {
         Form tempForm = new Form("Search", BoxLayout.y());
+
+        Label instrLabel = new Label("Enter a recipe name below");
+        TextField recipeField = new TextField("", "Recipe Name", 40, TextArea.ANY);
+        Button searchButton = new Button("Search");
+        Label blankLabel = new Label(" ");
         Button homeButton = new Button("Home");
+
+        tempForm.add(instrLabel);
+        tempForm.add(recipeField);
+        tempForm.add(searchButton);
+        tempForm.add(blankLabel);
         tempForm.add(homeButton);
+
+        searchButton.addActionListener((e) ->
+        {
+            Recipe rec = hashmap.getOrDefault(recipeField.getText(), null);
+            if(rec != null)
+            {
+                setRecipeForm(rec);
+                setPreviousForm(searchForm);
+                recipeForm.show();
+            }
+            else {
+
+            }
+        });
+
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
         searchForm = tempForm;
