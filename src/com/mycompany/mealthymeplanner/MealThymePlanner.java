@@ -202,7 +202,7 @@ public class MealThymePlanner {
     }
 
     public void setFuturePlanningForm() {
-        Form tempForm = new Form("Future Meal Planner", BoxLayout.y());
+        Form tempForm = new Form("Future Meal Planner", new GridLayout(6, 1));
 
         Button futureButton = new Button("View My Planned Recipes");
         Button planButton = new Button("Plan some future meals");
@@ -258,7 +258,7 @@ public class MealThymePlanner {
     }
 
     public void setFutureAddForm() {
-        Form tempForm = new Form("Add Future Meals", BoxLayout.y());
+        Form tempForm = new Form("Add Future Meals", new GridLayout(6, 1));
 
         Button recommendedButton = new Button("Recommended Recipes");
         Button customButton = new Button("My Recipes");
@@ -275,8 +275,16 @@ public class MealThymePlanner {
         tempForm.add(homeButton);
 
         recommendedButton.addActionListener((e) -> recommendedForm.show());
-        customButton.addActionListener((e) -> myRecipesForm.show());
-        favoriteButton.addActionListener((e) -> favoriteRecipesForm.show());
+        customButton.addActionListener((e) ->
+        {
+            setPreviousForm(futureAddForm);
+            myRecipesForm.show();
+        });
+        favoriteButton.addActionListener((e) ->
+        {
+            setPreviousForm(futureAddForm);
+            favoriteRecipesForm.show();
+        });
         backButton.addActionListener((e) -> futurePlanningForm.show());
         homeButton.addActionListener((e) -> mainMenuForm.show());
 
@@ -504,12 +512,14 @@ public class MealThymePlanner {
         homeButton.addActionListener((e) -> mainMenuForm.show());
         myRecipesButton.addActionListener((e) ->
         {
+            setPreviousForm(savedRecipesForm);
             setMyRecipesForm();
             myRecipesForm.show();
         });
         customButton.addActionListener((e) -> addCustomRecipeForm.show());
         favoriteButton.addActionListener((e) ->
         {
+            setPreviousForm(savedRecipesForm);
             setFavoriteRecipesForm();
             favoriteRecipesForm.show();
         });
@@ -545,7 +555,7 @@ public class MealThymePlanner {
         tempForm.add(homeButton);
         tempForm.add(backButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
-        backButton.addActionListener((e) -> savedRecipesForm.show());
+        backButton.addActionListener((e) -> previousForm.show());
 
         myRecipesForm = tempForm;
     }
@@ -682,7 +692,7 @@ public class MealThymePlanner {
         tempForm.add(homeButton);
         tempForm.add(backButton);
         homeButton.addActionListener((e) -> mainMenuForm.show());
-        backButton.addActionListener((e) -> savedRecipesForm.show());
+        backButton.addActionListener((e) -> previousForm.show());
 
         favoriteRecipesForm = tempForm;
     }
