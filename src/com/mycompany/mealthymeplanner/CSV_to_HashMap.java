@@ -75,7 +75,7 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
             Log.e(err);
         }
         //This is to test hashmap functionality.
-        //tester();
+        tester();
     }
 
     /**
@@ -88,14 +88,60 @@ public class CSV_to_HashMap extends HashMap<String, Recipe> {
      * This is a tester method to test if the hashmap is holding the recipe objects from all of the .csvs.
      */
     private void tester(){
-        System.out.println("EastAfrican recipes: "+recipes.containsKey("Roasted Okra"));
-        Recipe r = recipes.get("Roasted Okra");
-        System.out.println("Name: "+r.getName());
-        for(RecipeIngredient ri : r.getIngredients()) {
+        System.out.println("African recipes: "+recipes.containsKey("South African-Inspired Butternut Soup") + ": Contains African recipes!");
+        System.out.println("American recipes: "+recipes.containsKey("New York Steaks with a Vanilla and Cherry Sauce") + ": Contains American recipes!");
+        System.out.println("Asian recipes: "+recipes.containsKey("Sesame Chicken Dip") + ": Contains Asian recipes!");
+        System.out.println("Italian recipes: "+recipes.containsKey("Ravioli Lasagna") + ": Contains Italian recipes!");
+        System.out.println("Mexican recipes: "+recipes.containsKey("Chipotle Chicken Tostadas") + ": Contains Mexican recipes!");
+        System.out.println("MiddleEastern recipes: "+recipes.containsKey("Rose Petal Cookies") + ": Contains MiddleEastern recipes!");
+
+        Recipe AF = recipes.get("South African-Inspired Butternut Soup");
+        System.out.println("Name: "+AF.getName());
+        for(RecipeIngredient ri : AF.getIngredients()) {
             Ingredient ing = ri.getIngredient();
             System.out.println("Ingredients: " + ing.getName());
         }
-        System.out.println(r.getRecipeTags());
+        System.out.println(AF.getRecipeTags());
+
+        Recipe AM = recipes.get("New York Steaks with a Vanilla and Cherry Sauce");
+        System.out.println("Name: "+AM.getName());
+        for(RecipeIngredient ri : AM.getIngredients()) {
+            Ingredient ing = ri.getIngredient();
+            System.out.println("Ingredients: " + ing.getName());
+        }
+        System.out.println(AM.getRecipeTags());
+
+        Recipe AS = recipes.get("Sesame Chicken Dip");
+        System.out.println("Name: "+AS.getName());
+        for(RecipeIngredient ri : AS.getIngredients()) {
+            Ingredient ing = ri.getIngredient();
+            System.out.println("Ingredients: " + ing.getName());
+        }
+        System.out.println(AS.getRecipeTags());
+
+        Recipe IT = recipes.get("Ravioli Lasagna");
+        System.out.println("Name: "+IT.getName());
+        for(RecipeIngredient ri : IT.getIngredients()) {
+            Ingredient ing = ri.getIngredient();
+            System.out.println("Ingredients: " + ing.getName());
+        }
+        System.out.println(IT.getRecipeTags());
+
+        Recipe ME = recipes.get("Chipotle Chicken Tostadas");
+        System.out.println("Name: "+ME.getName());
+        for(RecipeIngredient ri : ME.getIngredients()) {
+            Ingredient ing = ri.getIngredient();
+            System.out.println("Ingredients: " + ing.getName());
+        }
+        System.out.println(ME.getRecipeTags());
+
+        Recipe Mid = recipes.get("Rose Petal Cookies");
+        System.out.println("Name: "+Mid.getName());
+        for(RecipeIngredient ri : Mid.getIngredients()) {
+            Ingredient ing = ri.getIngredient();
+            System.out.println("Ingredients: " + ing.getName());
+        }
+        System.out.println(Mid.getRecipeTags());
     }
 
     /**
